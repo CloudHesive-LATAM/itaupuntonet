@@ -7,7 +7,7 @@ pipeline {
 apiVersion: v1
 kind: Pod
 spec:
-  serviceAccountName: prueba
+  serviceAccountName: jenkins
   containers:
   - name: tfrunner
     image: 793764525616.dkr.ecr.us-east-1.amazonaws.com/terraform-runner:1.0
