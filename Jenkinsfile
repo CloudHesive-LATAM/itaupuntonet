@@ -63,6 +63,7 @@ spec:
                       # Assume Shared account role and create DB credentials Secret Manager Shared account
                       
                       terraform plan
+                      terraform apply -auto-approve
                       
                     '''
                 }
