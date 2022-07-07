@@ -61,9 +61,8 @@ spec:
                           -backend-config="encrypt=true"
                       
                       # Assume Shared account role and create DB credentials Secret Manager Shared account
-                      
-                      terraform plan
-                      terraform destroy
+
+                  
                       
                     '''
                 }
