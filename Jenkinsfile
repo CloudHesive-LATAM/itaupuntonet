@@ -29,7 +29,12 @@ spec:
             steps {
                 container('tfrunner') {
                   sh '''
-                    ls -lah 
+                    
+                      # Do sts and load variables
+                      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+                      echo "AK $AWS_ACCESS_KEY_ID"
+                      echo "SK $AWS_SECRET_ACCESS_KEY"
+                      echo "AWS_SESSION_TOKEN $AWS_SESSION_TOKEN"
                     
                     '''
                 }
