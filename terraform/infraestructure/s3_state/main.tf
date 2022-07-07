@@ -1,7 +1,6 @@
 
 resource "aws_s3_bucket" "terraform_state" {
   bucket = var.bucket_state_name
-  region = var.bucket_region
 
   lifecycle {
     prevent_destroy = true

@@ -14,9 +14,3 @@ variable "dynamodb_table_name" {
   description = "The name of the DynamoDb table used to lock the state."
   default     = "terraform-locks-itau-puntonet"
 }
-
-variable "bucket_region" {
-  type        = string
-  description = "Region of S3 Bucket holding TF State"
-  default     = "us-east-1"
-}
