@@ -60,7 +60,7 @@ spec:
                           -backend-config="key=terraform.tfstate" \
                           -backend-config="region=us-east-1" \
                           -backend-config="dynamodb_table=terraform-locks-itau-puntonet" \
-                          -backend-config="encrypt=true" \
+                          -backend-config="encrypt=true"
                       terraform plan
                       
                     '''
