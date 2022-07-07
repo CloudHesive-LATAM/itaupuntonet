@@ -36,6 +36,9 @@ spec:
                       echo "AK $AWS_ACCESS_KEY_ID"
                       echo "SK $AWS_SECRET_ACCESS_KEY"
                       echo "AWS_SESSION_TOKEN $AWS_SESSION_TOKEN"
+                      cd terraform/infraestructure/s3_state
+                      terraform init
+                      terraform plan
                     
                     '''
                 }
