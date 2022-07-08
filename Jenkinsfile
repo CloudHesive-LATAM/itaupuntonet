@@ -29,10 +29,11 @@ spec:
                 container('tfrunner') {
                   sh '''
                     
-                      # Assume role and load variables (hiding variables)
+                      # Assume role (TO DEV) and load variables (hiding variables)
                       set +x
                       export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
                       
+                      echo $(aws sts get-caller-identity)
                       # Execute script to create S3 Bucket for remote backend in case it is not already created
                       
                       sh terraform/infraestructure/s3_state_creation/creator_script.sh "itaunetinfrasandbox" "terraform-locks-itau-puntonet"
@@ -50,8 +51,12 @@ spec:
                     
                       # Assume Development account role and load variables to Initialize Terraform backend
                       set +x
+                      echo $(aws sts get-caller-identity)
+                      
                       export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
                       echo " Role has been assumed " 
+                      echo $(aws sts get-caller-identity)
+                      
                       set -x
 
                       cd terraform/infraestructure/application
