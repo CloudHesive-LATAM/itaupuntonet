@@ -24,25 +24,25 @@ spec:
     stages {
 
         
-        stage('S3 State creation') {
-            steps {
-                container('tfrunner') {
-                  sh '''
+    //     stage('S3 State creation') {
+    //         steps {
+    //             container('tfrunner') {
+    //               sh '''
                     
-                      # Assume role (TO DEV) and load variables (hiding variables)
-                      set +x
-                      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+    //                   # Assume role (TO DEV) and load variables (hiding variables)
+    //                   set +x
+    //                   export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
                       
-                      echo $(aws sts get-caller-identity)
-                      # Execute script to create S3 Bucket for remote backend in case it is not already created
+    //                   echo $(aws sts get-caller-identity)
+    //                   # Execute script to create S3 Bucket for remote backend in case it is not already created
                       
-                      sh terraform/infraestructure/s3_state_creation/creator_script.sh "itaunetinfrasandbox" "terraform-locks-itau-puntonet"
+    //                   sh terraform/infraestructure/s3_state_creation/creator_script.sh "itaunetinfrasandbox" "terraform-locks-itau-puntonet"
                       
-                    '''
-                }
-            }
+    //                 '''
+    //             }
+    //         }
 
-    }
+    // }
 
         stage('Creation of secrets Security Account') {
             steps {
@@ -72,7 +72,7 @@ spec:
                       terraform plan
                       # VAR PRECEDENDE: https://spacelift.io/_next/image?url=https%3A%2F%2Fspaceliftio.wpcomstaging.com%2Fwp-content%2Fuploads%2F2022%2F05%2Fimage8-2.png&w=1920&q=75
 
-                      #terraform apply -auto-approve
+                      terraform apply -auto-approve
                       
                     '''
                 }
