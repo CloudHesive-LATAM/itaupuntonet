@@ -49,12 +49,12 @@ spec:
                 container('tfrunner') {
                   sh '''
                     
-                      # Assume Development account role and load variables to Initialize Terraform backend
+                      # Assume (Development account) role and load variables to Initialize Terraform backend
                       set +x
-                      echo $(aws sts get-caller-identity)
-                      
+                     
                       export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
-                      echo " Role has been assumed " 
+                      
+                      echo " Role has been assumed DEV" 
                       echo $(aws sts get-caller-identity)
                       
                       set -x
