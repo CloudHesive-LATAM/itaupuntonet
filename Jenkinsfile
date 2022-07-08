@@ -72,9 +72,13 @@ spec:
                       
                       terraform plan -out tfplan.binary 
                       terraform show -json tfplan.binary > tfplan.json
+
+                      echo " ------------ INFRACOST ------------ "
+                      set +x
+                        export INFRACOST_API_KEY="uSEQ1Iyc8xkSAWzEnn9ZrNOffDCnQg7t"
+                      set -x
                       
-                      # ---- INFRACOST -----
-                      export INFRACOST_API_KEY="uSEQ1Iyc8xkSAWzEnn9ZrNOffDCnQg7t"
+                      
                       # TOTAL
                       infracost breakdown --path=. > infracost_totalcost.txt
                       # DIFF
@@ -87,6 +91,12 @@ spec:
                       #terraform plan
                       # VAR PRECEDENDE: https://spacelift.io/_next/image?url=https%3A%2F%2Fspaceliftio.wpcomstaging.com%2Fwp-content%2Fuploads%2F2022%2F05%2Fimage8-2.png&w=1920&q=75
 
+                      bucketname="itaunetinfrasandbox"
+                      keyfile="terraform.tfstate"
+                      echo " ------------ DRIFTCTL ------------ "
+                      driftctl scan --from tfstate+s3://$bucketname/$keyfile > driftctl_info.txt || echo "driftcl run successfully" 
+                      sleep 5
+                      cat 
                       #terraform apply -auto-approve
                       
                     '''
