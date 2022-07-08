@@ -71,7 +71,7 @@ spec:
                       # Assume Shared account role and create DB credentials Secret Manager Shared account
                       
                       # ---- INFRACOST -----
-                      INFRACOST_API_KEY="uSEQ1Iyc8xkSAWzEnn9ZrNOffDCnQg7t"
+                      export INFRACOST_API_KEY="uSEQ1Iyc8xkSAWzEnn9ZrNOffDCnQg7t"
                       # TOTAL
                       infracost breakdown --path=. > infracost_totalcost.txt
                       # DIFF
