@@ -1,17 +1,6 @@
 FROM python:alpine as pythonbase
 FROM alpine:latest as alpinebase
 
-# GO Disposable IMAGE
-# FROM golang:alpine as go-disposable
-#     WORKDIR /salida
-
-#     # Install tfsec
-#     RUN go install github.com/aquasecurity/tfsec/cmd/tfsec@latest && \
-#         which tfsec && \
-#         #tfsec -v && \
-#         mv /go/bin/tfsec /salida
-
-# Python Disposable builder IMAGE
 FROM python:slim as python-disposable
     
     # Install Checkov (unit test)
@@ -39,37 +28,7 @@ FROM alpinebase as builder-disposable
         mv jq-linux64 /usr/local/bin/jq && \
         chmod +x /usr/local/bin/jq && \
         mv /usr/local/bin/jq /salida
-    # # Install Terraform
 
-    # ENV TF_VERSION=1.2.3
-    # RUN wget -q https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip && \
-    #     unzip terraform_${TF_VERSION}_linux_amd64.zip && \
-    #     mv terraform /salida/ && \
-    #     /salida/terraform --version
-
-    # # Install drifctl
-    # RUN curl -s -L https://github.com/snyk/driftctl/releases/latest/download/driftctl_linux_amd64 -o driftctl && \
-    #     chmod +x driftctl && \
-    #     mv driftctl /salida/ && \
-    #     /salida/driftctl version 
-
-    # # Install infracost
-    # RUN final_endpoint=$(curl -Ls -o /dev/null -w %{url_effective} https://github.com/infracost/infracost/releases/latest) && \
-    #     version=$(printf "%s\n" "$final_endpoint" | rev | cut -d/ -f-1 | rev) && \
-    #     echo "version to be downloaded: $version" && \
-    #     wget -q https://github.com/infracost/infracost/releases/download/$version/infracost-linux-amd64.tar.gz && \
-    #     tar xzf infracost-linux-amd64.tar.gz -C /tmp && \
-    #     mv /tmp/infracost-linux-amd64 /salida/infracost && \
-    #     /salida/infracost --version
-
-    # # Install regula
-    # RUN wget https://github.com/fugue/regula/releases/download/v2.8.0/regula_2.8.0_Linux_x86_64.tar.gz -O regula
-    # RUN tar -xvf regula
-    # RUN mv regula /salida
-    
-#     #RUN wget https://github.com/im2nguyen/rover/releases/download/v0.3.2/rover_0.3.2_linux_amd64.zip && \ 
-#     #    unzip rover.zip && \
-#     #./rover_v0.3.2 -workingDir "/home/david/Documents/GitHub/IaC/itau-cl/eks-tf-sandb/tf/root_module" -tfPath "/usr/bin/terraform"
 
 # Real container 
 FROM pythonbase as real-container
