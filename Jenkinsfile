@@ -107,7 +107,7 @@ spec:
 
                       echo " ------------ REGULA ------------ "
                       # REGULA (Open Policy Agent (OPA) project - Policy-based control for cloud native environments)
-                      - regula run > regula_info.txt || echo "Regula run successfully" 
+                      regula run > regula_info.txt || echo "Regula run successfully" 
                       cat regula_info.txt
                       sleep 5
                       
