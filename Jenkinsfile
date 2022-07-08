@@ -70,10 +70,16 @@ spec:
                       
                       # Assume Shared account role and create DB credentials Secret Manager Shared account
                       
-                      terraform plan
+                      # ---- INFRACOST -----
+                      INFRACOST_API_KEY="uSEQ1Iyc8xkSAWzEnn9ZrNOffDCnQg7t"
+                      # TOTAL
+                      - infracost breakdown --path=. > infracost_totalcost.txt
+                      # DIFF
+                      - infracost diff --path=tfplan.json > infracost_diff.txt
+                      #terraform plan
                       # VAR PRECEDENDE: https://spacelift.io/_next/image?url=https%3A%2F%2Fspaceliftio.wpcomstaging.com%2Fwp-content%2Fuploads%2F2022%2F05%2Fimage8-2.png&w=1920&q=75
 
-                      terraform apply -auto-approve
+                      #terraform apply -auto-approve
                       
                     '''
                 }
