@@ -1,0 +1,29 @@
+curl -o example-iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-ebs-csi-driver/master/docs/example-iam-policy.json
+
+aws --profile itauchile-manpower-pipe iam create-policy \
+    --policy-name AmazonEKS_EBS_CSI_Driver_Policy \
+    --policy-document file://example-iam-policy.json
+
+aws --profile "itauchile-manpower-pipe" --region "us-east-1" eks describe-cluster \
+    --name itaucluster \
+    --query "cluster.identity.oidc.issuer" \
+    --output text
+
+# https://oidc.eks.us-east-1.amazonaws.com/id/B212F5D1724C804FBE33289371849340
+
+aws --profile "itauchile-manpower-pipe" --region "us-east-1" iam create-role \
+    --role-name AmazonEKS_EBS_CSI_DriverRole2 \
+    --assume-role-policy-document file://"trust-policy.json"
+
+aws --profile "itauchile-manpower-pipe" --region "us-east-1" iam attach-role-policy \
+  --policy-arn arn:aws:iam::793764525616:policy/AmazonEKS_EBS_CSI_Driver_Policy \
+  --role-name AmazonEKS_EBS_CSI_DriverRole2
+
+helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+helm repo update
+
+helm upgrade -install aws-ebs-csi-driver aws-ebs-csi-driver/aws-ebs-csi-driver \
+    --namespace kube-system \
+    --set controller.serviceAccount.create=true \
+    --set controller.serviceAccount.name=ebs-csi-controller-sa \
+    --set controller.serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::793764525616:role/AmazonEKS_EBS_CSI_DriverRole2"
