@@ -96,7 +96,7 @@ spec:
                       echo " ------------ DRIFTCTL ------------ "
                       driftctl scan --from tfstate+s3://$bucketname/$keyfile > driftctl_info.txt || echo "driftcl run successfully" 
                       sleep 5
-                      cat 
+                      cat driftctl_info.txt
                       #terraform apply -auto-approve
                       
                     '''
