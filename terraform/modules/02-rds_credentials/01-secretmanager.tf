@@ -1,4 +1,6 @@
 resource "random_password" "master"{
+  provider = aws.sts_shared_account
+  
   length           = 16
   special          = true
   override_special = "_!%^"

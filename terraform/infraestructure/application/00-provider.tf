@@ -24,6 +24,7 @@ provider "aws" {
   alias = "sts_shared_account"
   assume_role {
     role_arn = var.role_arn_sts_shared
+    session_name "test"
   }
 
 }
