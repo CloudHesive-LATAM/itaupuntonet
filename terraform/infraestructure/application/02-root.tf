@@ -13,12 +13,6 @@
 
 # }
 
-# module "rds_credentials" {
-#    source            = "../../modules/02-rds_credentials"
-#    providers = {
-#      aws = aws.sts_shared_account
-#    }
-# }
 
 # provider "aws" {
 #   region = "us-east-2"
@@ -34,6 +28,7 @@
 #   }
 # }
 
+# TOMAR DATA PARA VER Q SE PUEDA ASUMIR EL ROL
 data "aws_caller_identity" "parent" {
   provider = aws
 }
@@ -49,4 +44,12 @@ output "account_id_child" {
 
 output "account_id_parent" {
   value = data.aws_caller_identity.parent.account_id
+}
+
+
+module "rds_credentials" {
+   source            = "../../modules/02-rds_credentials"
+   providers = {
+     aws = aws.sts_shared_account
+   }
 }
