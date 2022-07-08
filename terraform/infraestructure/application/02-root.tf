@@ -52,5 +52,6 @@ module "rds_credentials" {
    providers = {
      aws = aws
      aws.sts_shared_account = aws.sts_shared_account
+     random = random
    }
 }

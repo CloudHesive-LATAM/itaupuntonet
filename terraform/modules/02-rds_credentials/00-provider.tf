@@ -7,7 +7,14 @@ terraform {
       version               = "~> 4.0"
       configuration_aliases = [aws, aws.sts_shared_account]
     }
+    
+    random = {
+      source  = "hashicorp/random"
+      version = "3.1.0"
+    }
   }
+
+  
 }
 
 # data "aws_caller_identity" "parent" {

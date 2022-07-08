@@ -1,9 +1,9 @@
-# resource "random_password" "master"{
-#   provider = aws.sts_shared_account
-#   length           = 16
-#   special          = true
-#   override_special = "_!%^"
-# }
+resource "random_password" "master"{
+  provider = aws.sts_shared_account
+  length           = 16
+  special          = true
+  override_special = "_!%^"
+}
 
 resource "aws_secretsmanager_secret" "password" {
   provider = aws.sts_shared_account
@@ -13,6 +13,5 @@ resource "aws_secretsmanager_secret" "password" {
 resource "aws_secretsmanager_secret_version" "password" {
   provider = aws.sts_shared_account
   secret_id = aws_secretsmanager_secret.password.id
-  secret_string = "test21"
-  #random_password.master.result
+  secret_string = random_password.master.result
 }
