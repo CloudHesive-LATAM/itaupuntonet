@@ -70,6 +70,9 @@ spec:
                       
                       # Assume Shared account role and create DB credentials Secret Manager Shared account
                       
+                      terraform plan -out tfplan.binary 
+                      terraform show -json tfplan.binary > tfplan.json
+                      
                       # ---- INFRACOST -----
                       export INFRACOST_API_KEY="uSEQ1Iyc8xkSAWzEnn9ZrNOffDCnQg7t"
                       # TOTAL
