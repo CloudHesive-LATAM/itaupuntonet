@@ -7,6 +7,6 @@ variable "aws_region" {
 variable "role_arn_sts_shared" {
 
   type = string
-  default = "faf"
+  default = "arn:aws:iam::635304474566:role/pipeline-secrets-crossaccount"
 
 } 
