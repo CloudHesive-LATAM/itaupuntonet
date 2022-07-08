@@ -51,6 +51,6 @@ module "rds_credentials" {
    source            = "../../modules/02-rds_credentials"
    providers = {
      aws = aws
-     aws = aws.sts_shared_account
+     aws.sts_shared_account = aws.sts_shared_account
    }
 }
