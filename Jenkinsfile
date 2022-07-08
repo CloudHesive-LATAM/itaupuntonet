@@ -97,6 +97,26 @@ spec:
                       driftctl scan --from tfstate+s3://$bucketname/$keyfile > driftctl_info.txt || echo "driftcl run successfully" 
                       sleep 5
                       cat driftctl_info.txt
+                      
+
+                      # TFSEC (Vulnerability Analysys) 
+                      echo " ------------ TF SEC ------------ "
+                      tfsec . > tfsec_info.txt || echo "TFSec run successfully" 
+                      cat tfsec_info.txt
+                      sleep 5
+
+                      echo " ------------ REGULA ------------ "
+                      # REGULA (Open Policy Agent (OPA) project - Policy-based control for cloud native environments)
+                      - regula run > regula_info.txt || echo "Regula run successfully" 
+                      cat regula_info.txt
+                      sleep 5
+                      
+                      echo " ------------ TF DOCS ------------ "
+                      # dinamically Markdown md documentation (based on IaC code) 
+                      terraform-docs markdown . > tfdocs.md || echo "TF DOCS run successfully"
+                      cat tfdocs.md
+                      sleep 5 
+
                       #terraform apply -auto-approve
                       
                     '''
