@@ -29,7 +29,7 @@ spec:
                 container('tfrunner') {
                   sh '''
                     
-                      # Assume role and load variables
+                      # Assume role and load variables (hiding variables)
                       set +x
                       export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
                       
@@ -43,33 +43,35 @@ spec:
 
     }
 
-    //     stage('Creation of secrets Security Account') {
-    //         steps {
-    //             container('tfrunner') {
-    //               sh '''
+        stage('Creation of secrets Security Account') {
+            steps {
+                container('tfrunner') {
+                  sh '''
                     
-    //                   # Assume Development account role and load variables to Initialize Terraform backend
+                      # Assume Development account role and load variables to Initialize Terraform backend
+                      set +x
+                      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 
-    //                   export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::137985267002:role/crossaccount-pipe" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+                      set -x
+                      
+                      cd terraform/infraestructure/application
+                      terraform init \
+                          -backend-config="bucket=itaunetinfrasandbox" \
+                          -backend-config="key=terraform.tfstate" \
+                          -backend-config="region=us-east-1" \
+                          -backend-config="dynamodb_table=terraform-locks-itau-puntonet" \
+                          -backend-config="encrypt=true"
+                      
+                      # Assume Shared account role and create DB credentials Secret Manager Shared account
+                      
+                      terraform plan
+                      terraform apply -auto-approve
+                      
+                    '''
+                }
+            }
 
-    //                   cd terraform/infraestructure/application
-    //                   terraform init \
-    //                       -backend-config="bucket=itaunetinfrasandbox" \
-    //                       -backend-config="key=terraform.tfstate" \
-    //                       -backend-config="region=us-east-1" \
-    //                       -backend-config="dynamodb_table=terraform-locks-itau-puntonet" \
-    //                       -backend-config="encrypt=true"
-                      
-    //                   # Assume Shared account role and create DB credentials Secret Manager Shared account
-                      
-    //                   terraform plan
-    //                   terraform apply -auto-approve
-                      
-    //                 '''
-    //             }
-    //         }
-
-    // }
+    }
 
 
         
