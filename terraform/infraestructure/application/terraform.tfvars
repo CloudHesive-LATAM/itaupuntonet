@@ -1,0 +1,1 @@
+role_arn_sts_shared="arn:aws:iam::635304474566:role/pipeline-secrets-crossaccount"
