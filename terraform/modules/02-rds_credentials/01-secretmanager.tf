@@ -16,11 +16,11 @@ resource "aws_secretsmanager_secret_version" "password" {
   secret_string = random_password.master.result
 }
 
-resource "aws_s3_bucket" "terraform_state" {
-  provider = aws
-  bucket = "fafaidfaseiufdxszoivjasidofuasd12321dfdf3"
+# resource "aws_s3_bucket" "terraform_state" {
+#   provider = aws # dev
+#   bucket = "fafaidfaseiufdxszoivjasidofuasd12321dfdf3"
 
-  lifecycle {
-    prevent_destroy = true
-  }
-}
+#   lifecycle {
+#     prevent_destroy = true
+#   }
+# }
