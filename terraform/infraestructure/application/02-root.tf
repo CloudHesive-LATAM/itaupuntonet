@@ -1,6 +1,11 @@
 module "rds" {
   source            = "../../modules/01-rds"
-  
+  providers = {
+     aws = aws # cuenta dev
+     aws.sts_shared_account = aws.sts_shared_account # cuenta shared / security
+     random = random # extras
+  }
+
   allocated_storage    = var.allocated_storage 
   engine               = var.engine
   engine_version       = var.engine_version
@@ -11,14 +16,4 @@ module "rds" {
   parameter_group_name = "default"
   skip_final_snapshot  = true
 
-}
-
-module "rds_credentials" {
-   source            = "../../modules/02-rds_credentials"
-   providers = {
-     aws = aws # cuenta dev
-     aws.sts_shared_account = aws.sts_shared_account # cuenta shared / security
-     random = random # extras
-     
-   }
 }
