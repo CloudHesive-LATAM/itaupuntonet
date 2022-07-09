@@ -18,9 +18,14 @@ terraform {
   }
 }
 
+# DEV
 provider "aws" {
   region     = var.aws_region
-  # DEV
+  alias = "sts_dev_account"
+  assume_role {
+    role_arn = var.role_arn_sts_dev
+    session_name = "dev"
+  }
 
 }
 
@@ -31,7 +36,7 @@ provider "aws" {
   alias = "sts_shared_account"
   assume_role {
     role_arn = var.role_arn_sts_shared
-    session_name = "test"
+    session_name = "shared"
   }
 
 }

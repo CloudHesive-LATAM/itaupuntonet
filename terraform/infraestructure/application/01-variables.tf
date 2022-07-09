@@ -10,3 +10,9 @@ variable "role_arn_sts_shared" {
   default = "arn:aws:iam::635304474566:role/pipeline-secrets-crossaccount"
 
 } 
+
+variable "role_arn_sts_dev" {
+
+  type = string
+  
+}
