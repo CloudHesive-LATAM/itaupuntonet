@@ -1,5 +1,5 @@
 module "rds" {
-  source            = "../../modules/rds"
+  source            = "../../modules/01-rds"
   
   allocated_storage    = var.allocated_storage 
   engine               = var.engine
