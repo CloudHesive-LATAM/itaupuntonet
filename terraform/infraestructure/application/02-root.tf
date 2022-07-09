@@ -11,6 +11,7 @@ module "rds" {
   parameter_group_name = "default"
   skip_final_snapshot  = true
 
+}
 
 module "rds_credentials" {
    source            = "../../modules/02-rds_credentials"
