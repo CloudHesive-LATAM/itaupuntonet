@@ -28,7 +28,7 @@ data "aws_secretsmanager_secret" "password" {
 
 data "aws_secretsmanager_secret_version" "password" {
   provider = aws.sts_shared_account
-  secret_id = data.aws_secretsmanager_secret.password
+  secret_id = data.aws_secretsmanager_secret.password.id
 }
 
 resource "aws_db_instance" "postgrespuntonet" {
