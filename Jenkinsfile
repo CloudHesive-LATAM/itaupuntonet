@@ -122,7 +122,7 @@ spec:
                       cat tfdocs.md
                       sleep 5 
 
-                      terraform apply -auto-approve
+                      #terraform apply -auto-approve
                       
                     '''
                 }
