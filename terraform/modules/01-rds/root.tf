@@ -49,7 +49,7 @@ resource "aws_db_instance" "postgrespuntonet" {
   instance_class       = var.instance_class
   name                 = var.name
   username             = var.username
-  password             = jsondecode(data.aws_secretsmanager_secret_version.password.secret_string) #data.aws_secretsmanager_secret_version.password
+  password             = "dsadsadas4324432"#jsondecode(data.aws_secretsmanager_secret_version.password.secret_string) #data.aws_secretsmanager_secret_version.password
   parameter_group_name = "default"
   skip_final_snapshot  = true
 }
