@@ -28,13 +28,17 @@ data "aws_secretsmanager_secret" "password" {
 
 data "aws_secretsmanager_secret_version" "password" {
   provider = aws.sts_shared_account
-  secret_id = data.aws_secretsmanager_secret.password.id
+  secret_id = data.aws_secretsmanager_secret.password
 }
 
 # locals {
 #   your_secret = jsondecode(
 #     data.aws_secretsmanager_secret_version.creds.secret_string
 #   )
+# }
+
+# output "example" {
+#   value = jsondecode(data.aws_secretsmanager_secret_version.password.secret_string)["key1"]
 # }
 
 resource "aws_db_instance" "postgrespuntonet" {
@@ -45,7 +49,7 @@ resource "aws_db_instance" "postgrespuntonet" {
   instance_class       = var.instance_class
   name                 = var.name
   username             = var.username
-  password             = "dsadasdsa3232"#data.aws_secretsmanager_secret_version.password
+  password             = data.aws_secretsmanager_secret_version.password
   parameter_group_name = "default"
   skip_final_snapshot  = true
 }
