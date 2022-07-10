@@ -14,8 +14,5 @@ module "rds" {
   instance_class       = "m5.small"
   name                 = "itaupuntonet"
   username             = "dbadmin"
-  password             = data.aws_secretsmanager_secret_version.password
-  parameter_group_name = "default"
-  skip_final_snapshot  = true
 
 }
