@@ -37,7 +37,7 @@ spec:
                       echo $(aws sts get-caller-identity)
                       # Execute script to create S3 Bucket for remote backend in case it is not already created
                       
-                      sh terraform/infraestructure/s3_state_creation/creator_script.sh "itaunetinfrasandboxdev" "terraform-locks-itau-puntonet"
+                      sh terraform/infraestructure/s3_state_creation/creator_script.sh "itaunetinfrasandboxdev" "terraform-locks-itau-puntonet-dev"
                       
                     '''
                 }
