@@ -27,40 +27,35 @@ class Checker:
             self.create_rds = True
             log.info ("DynamoDB Table {} DOESN'T Exists.. Proceed with its creation ".format(self.table))
             response = dynamodb_client.create_table(
-                AttributeDefinitions=[
-                    {
-                        'AttributeName': 'Artist',
-                        'AttributeType': 'S',
-                    },
-                    {
-                        'AttributeName': 'SongTitle',
-                        'AttributeType': 'S',
-                    },
-                ],
+                
                 KeySchema=[
                     {
-                        'AttributeName': 'Artist',
-                        'KeyType': 'HASH',
-                    },
-                    {
-                        'AttributeName': 'SongTitle',
-                        'KeyType': 'RANGE',
-                    },
+                    'AttributeName': 'LockID',
+                    'KeyType': 'HASH',
+                    }
                 ],
-                ProvisionedThroughput={
-                    'ReadCapacityUnits': 20,
-                    'WriteCapacityUnits': 20,
-                },
+                AttributeDefinitions=[
+                    {
+                        'AttributeName': 'LockID',
+                        'AttributeType': 'S',
+                    }
+                ],
+                BillingMode= 'PAY_PER_REQUEST',
                 TableName=self.table,
             )
+        
         else:
             self.create_rds = False
             log.info ("{} DynamoDB already Exists".format(self.table))
             
-    
-        # S3
-        # dynamodb_client = boto3.client('dynamodb', region_name=self.region)
+##############################################################################################3
 
+        # s3_client = boto3.client('s3', region_name=self.region)
+
+        # bucket = s3.create_bucket(Bucket=self.bucket)
+        
+        
+        
         
         # existing_tables = dynamodb_client.list_tables()['TableNames']
  
