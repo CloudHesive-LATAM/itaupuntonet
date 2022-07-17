@@ -1,18 +1,34 @@
-module "rds" {
-  source            = "../../modules/01-rds"
+module "networking" {
   providers = {
-     aws.sts_dev_account = aws.sts_dev_account # cuenta dev
-     aws.sts_shared_account = aws.sts_shared_account # cuenta shared / security
-     random = random # extras
-  }
+    # el normal para el hijo, es el asumido por el root
+    aws = aws.sts_destination_account
+    aws.sts_security_account = aws.sts_security_account
+    random = random
+  } 
+  count = var.create_nw == true ? 1 : 0
+  source            = "../modules/networking"
+  region            = var.aws_region["virginia"]
+  project-tags      = var.project-tags
+  resource-name-tag = "Consorcio-Nw"
+  tgw_id = var.tgw_id
+ 
+}
 
-  secret_name          = "itaunetsecretsandbox"
+module "eks" {
+  
+  providers = {
+    # el normal para el hijo, es el asumido por el root
+    aws = aws.sts_destination_account
+    aws.sts_security_account = aws.sts_security_account
+    random = random
+  } 
 
-  allocated_storage    = "100"
-  engine               = "postgres"
-  engine_version       = "14.1"
-  instance_class       = "m5.small"
-  name                 = "itaupuntonet"
-  username             = "dbadmin"
-
+  use_precreated_kms_encryption_key = var.use_precreated_kms_encryption_key
+  kms_encryption_arn = var.kms_encryption_arn
+  source            = "../modules/eks"
+  vpc_id = var.create_nw == true ? module.networking.vpc_id : var.nw_configurations["vpc_id"]
+  project-tags      = var.project-tags
+  resource-name-tag = "eks-"
+  private_subnets =  var.create_nw == true ? module.networking.private_subnets : var.nw_configurations["private_subnets"]
+  
 }

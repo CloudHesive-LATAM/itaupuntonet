@@ -37,7 +37,7 @@ spec:
                       echo $(aws sts get-caller-identity)
                       # Execute script to create S3 Bucket for remote backend in case it is not already created
                       
-                      sh terraform/infraestructure/s3_state_creation/creator_script.sh "itaunetinfrasandboxdev" "terraform-locks-itau-puntonet-dev"
+                      sh terraform/infraestructure/s3_state_creation/creator_script.sh 
                       
                     '''
                 }
@@ -45,6 +45,28 @@ spec:
 
     }
 
+    stage('EKS Cluster creation') {
+            steps {
+                container('tfrunner') {
+                  sh '''
+                    
+                      # Assume role (TO DEV) and load variables (hiding variables)
+                      set +x
+                      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn "arn:aws:iam::308582334619:role/STSFromCICDPipelineAccount" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+                      
+                      echo $(aws sts get-caller-identity)
+                      # Execute script to create S3 Bucket for remote backend in case it is not already created
+                      
+                      sh terraform/infraestructure/s3_state_creation/creator_script.sh 
+                      
+                    '''
+                }
+            }
+
+    }
+
+    
+    
     //     stage('Creation of secrets Security Account') {
     //         steps {
     //             container('tfrunner') {
