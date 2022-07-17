@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "runner.py", line 3, in <module>
+    sys.exit(0, 'var1,var2,var3')
+TypeError: exit expected at most 1 argument, got 2
