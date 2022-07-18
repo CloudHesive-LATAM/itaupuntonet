@@ -55,7 +55,6 @@ class Checker:
         s3 = boto3.resource('s3')
         bucket_name = self.bucket    
         bucket = s3.Bucket(self.bucket)
-        bucket_policy_id = "PreventS3Statefrombeingdeleted"
 
         if bucket.creation_date:
             log.info ("{} Bucket exists".format(self.bucket))        
@@ -69,7 +68,7 @@ class Checker:
             # Creates Bucket Policy
                 
             bucket_policy = {
-                    "Id": "{bucket_policy_id}",
+                    "Id": "PreventS3Statefrombeingdeleted",
                     "Statement": [
                         {
                             "Sid": "Bucketprotectionpolicy",
@@ -140,6 +139,27 @@ class Checker:
             parsed_block_publicaccess_response = block_publicaccess_response["PublicAccessBlockConfiguration"]
             log.info ("Configuration of Public access block for Bucket {} is as follows: ".format(self.bucket))
             log.info (parsed_block_publicaccess_response)
+
+            # Apply Server Side Encryption
+             
+            serverside_encryption = s3_client.put_bucket_encryption(
+                Bucket=bucket_name,
+                ServerSideEncryptionConfiguration={
+                    'Rules': [
+                        {
+                            'ApplyServerSideEncryptionByDefault': {
+                            'SSEAlgorithm': 'AES256'
+                            }
+                        },
+                    ]
+                }
+            )
+
+            s3sse_configuration = s3_client.get_bucket_encryption(Bucket=bucket_name)
+            s3sse_configuration_parsed =  s3sse_configuration["ServerSideEncryptionConfiguration"]
+            log.info("Configuration of encryption in Bucket {} is as follows: ".format(self.bucket))
+            log.info(s3sse_configuration_parsed)
+
 
 
 #EOF------------------------------------------------------------------------------------------------------------
