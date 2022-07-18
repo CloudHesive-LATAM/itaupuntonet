@@ -42,16 +42,16 @@ provider "aws" {
   region     = var.aws_region["virginia"]
 }
 
-provider "aws" {
-  # Cuenta Destino (dev)
-  alias = "sts_destination_account"
-  region     = var.aws_region["virginia"]
-  assume_role {
+# provider "aws" {
+#   # Cuenta Destino (dev)
+#   alias = "sts_destination_account"
+#   region     = var.aws_region["virginia"]
+#   assume_role {
     
-    role_arn = var.role_arn_destination_account
-  }
+#     role_arn = var.role_arn_destination_account
+#   }
 
-}
+# }
 
 provider "aws" {
   # Cuenta Shared/security 

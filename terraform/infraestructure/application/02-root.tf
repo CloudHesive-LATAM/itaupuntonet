@@ -1,7 +1,7 @@
 module "networking" {
   providers = {
     # el normal para el hijo, es el asumido por el root
-    aws = aws.sts_destination_account
+    #aws = aws.sts_destination_account
     aws.sts_security_account = aws.sts_security_account
     random = random
   } 
@@ -18,7 +18,7 @@ module "eks" {
   
   providers = {
     # el normal para el hijo, es el asumido por el root
-    aws = aws.sts_destination_account
+    #aws = aws.sts_destination_account
     aws.sts_security_account = aws.sts_security_account
     random = random
   } 

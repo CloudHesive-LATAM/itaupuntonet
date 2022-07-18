@@ -39,7 +39,7 @@ resource "aws_launch_template" "ec2_for_eks" {
   }
 
   update_default_version = true #Actualiza default_version a la última_versión en terraform apply 
-  key_name               = aws_key_pair.ec2-key.key_name
+  key_name               = aws_key_pair.ec2-key.key_name # Reemplazar por la de Cuenta Security
 
 
   monitoring {
