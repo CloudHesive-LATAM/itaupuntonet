@@ -13,6 +13,23 @@ variable "kms_encryption_arn" {
   description = "ARN of ksm key to apply S3 Server Side Encryption"
   
 } 
+/* 
+variable "parameters_and_configurations" {
+  type        = object ({
+    networking = object ({
+      create_nw = string
+      create_public_nw = string
+      create_ig = string
+      create_tg = string
+    })
+    rds = bool
+    elastic = bool
+    s3 = bool
+    env = string
+    idApp = number
+    responsible = string
+  })
+} */
 
 variable "create_public_nw" {
   type = string
