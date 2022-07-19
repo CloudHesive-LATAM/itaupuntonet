@@ -21,12 +21,15 @@ python3 terraform/infraestructure/s3_state_creation/checkDynamoAndS3Bucket.py $d
 cd terraform
 cd infraestructure
 cd application
-terraform init -backend-config="bucket=$bucket_s3" -backend-config="key=$key" -backend-config="region=us-east-1" -backend-config="dynamodb_table=$dynamodb_table_name" -backend-config="encrypt=true"
+# terraform init -backend-config="bucket=$bucket_s3" -backend-config="key=$key" -backend-config="region=us-east-1" -backend-config="dynamodb_table=$dynamodb_table_name" -backend-config="encrypt=true"
 
-terraform plan
+# terraform plan
 
-terraform apply --auto-approve
-sleep 2
-#rm -rf .terraform*
+# terraform apply --auto-approve
+# sleep 2
+
+# #rm -rf .terraform*
 
 cd $rootPath
+
+cp terraform/modules/02-eks/scripts/kubeconfig-test terraform/configurator/kubeconfig/
