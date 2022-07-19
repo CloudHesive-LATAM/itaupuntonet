@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  
+  name: jenkins-jnlp-nonroot-update
+  namespace: default
+
+
+spec:
+  
+  ports:
+  - port: 50000
+    protocol: TCP
+    targetPort: 50000
+  selector:
+    app: jenkins-server
+  sessionAffinity: None
+  type: ClusterIP

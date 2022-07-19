@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app1pod
+spec:
+  restartPolicy: Never
+  containers:
+  - name: app1pod
+    image: alpine:latest
+    command:
+          - /bin/sh
+          - "-c"
+          - "sleep 6000m"
+    imagePullPolicy: Always
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: /data
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: prueba-jenkins2
