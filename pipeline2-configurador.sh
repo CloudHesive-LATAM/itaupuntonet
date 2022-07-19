@@ -12,9 +12,12 @@ bucket_s3="$account-$reason-$project-$environment-bucket"
 profile="itauchile-manpower-pipe"
 key="$project-$environment-tfstate"
 
-#profile="default"
+# [STEP 1] - Connect to CICD jenkins account (remove profile when code is moved to Jenkins) 
+
+# [STEP 2] - do STS To DevAccount 
 export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/STSFromCICDPipelineAccount" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 
+# [STEP 3] - Based on NonRool ROLE, create NON Root EKS cluster
 python3 terraform/infraestructure/s3_state_creation/checkDynamoAndS3Bucket.py $dynamodb_table_name $bucket_s3
 
 # AFTER, START TERRAFORM
