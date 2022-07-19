@@ -4,11 +4,6 @@
 
 # Fin required providers
 
-variable "role_arn_destination_account" {
-  type = string 
-  
-}
-
 variable "role_arn_security_account" {
   type = string 
   
@@ -16,7 +11,13 @@ variable "role_arn_security_account" {
 variable "kms_encryption_arn" {
   type        = string
   description = "ARN of ksm key to apply S3 Server Side Encryption"
-  default = "arn:aws:kms:us-east-1:009011124986:key/mrk-1abd768774584becb1b21a7aa1d541ed"
+  
+} 
+
+variable "create_public_nw" {
+  type = string
+  description = "create public nw "
+  default = true
 }
 
 variable "use_precreated_kms_encryption_key" {

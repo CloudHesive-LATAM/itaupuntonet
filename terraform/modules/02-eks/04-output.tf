@@ -1,9 +1,8 @@
 # [STEP 1] - Use data TO OBTAIN TOKEN 
-data "aws_eks_cluster_auth" "cluster_auth" {
+/* data "aws_eks_cluster_auth" "cluster_auth" {
   
-
   name = aws_eks_cluster.eks-cluster.name
-}
+} */
 
 # [STEP 2] - Generate Outputs 
 output "eks_endpoint" {

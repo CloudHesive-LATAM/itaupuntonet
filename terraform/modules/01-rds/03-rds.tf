@@ -41,7 +41,7 @@ data "aws_secretsmanager_secret_version" "password" {
 #   value = jsondecode(data.aws_secretsmanager_secret_version.password.secret_string)["key1"]
 # }
 
-resource "aws_db_instance" "postgrespuntonet" {
+resource "aws_db_instance" "db_engine" {
   provider = aws #Dev
   allocated_storage    = var.allocated_storage
   engine               = var.engine

@@ -17,6 +17,11 @@ variable "eks_non_admin_IAM_policy_definition" {
   }
 }
 
+variable "vpc_cidr_block" {
+  type = string
+  description = "VPC CIDR Block"
+
+}
 
 variable "destination_account" {
     type = string

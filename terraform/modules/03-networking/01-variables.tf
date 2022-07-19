@@ -1,3 +1,9 @@
+variable "create_public_nw" {
+  type = string
+  description = "create public nw "
+  
+}
+
 # TGW ID 
 variable "tgw_id" {
   type    = string
