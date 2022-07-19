@@ -40,3 +40,16 @@ module "eks" {
   private_subnets =  var.create_nw == true ? module.networking[0].private_subnets : var.nw_configurations["private_subnets"]
   
 }
+
+module "rds" {
+
+  providers = {
+    aws = aws
+    aws.sts_security_account = aws.sts_security_account
+    random = random
+  }
+  
+  source            = "../../modules/01-rds"
+
+
+}

@@ -9,7 +9,7 @@ project="puntonet"
 environment="dev"
 dynamodb_table_name="$account-$reason-$project-$environment-dynamo"
 bucket_s3="$account-$reason-$project-$environment-bucket"
-profile="itauchile-manpower-pipe"
+profile="default"
 key="$project-$environment-tfstate"
 
 #profile="default"
