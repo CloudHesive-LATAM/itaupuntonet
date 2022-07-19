@@ -6,7 +6,7 @@ variable "tgw_id" {
 
 variable "vpcEndpoint" {
   type    = list(string)
-  default = ["sts", "ec2msg", "logs", "ecr-dkr", "ecr-api", "ec2", "ssm", "ssmmsg", "s3", ]
+  default = ["sts", "ec2msg", "logs", "ecr-dkr", "ecr-api", "ec2", "ssm", "ssmmsg", "s3"]
 }
 # VPC  cidr block
 variable "vpc_cidr" {
