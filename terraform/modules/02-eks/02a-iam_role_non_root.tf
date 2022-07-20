@@ -108,9 +108,10 @@ resource "aws_iam_role_policy_attachment" "attach_non_root_policy_to_eks_role" {
   }
 } */
 
-# then policy
-resource "aws_iam_policy" "reader_policy" {
-  name   = "reader_policy"  
+# [STEP 3] - Create reader group (Level 2 , Level 3 - AWS resources) 
+# 3.1 - Policy
+resource "aws_iam_policy" "eks-non-admin-policy" {
+  name   = "eks-non-admin-policy"  
   path   = "/"
   #policy = data.aws_iam_policy_document.read_policy_document.json
   policy = jsonencode(
@@ -133,11 +134,11 @@ resource "aws_iam_policy" "reader_policy" {
     })
 }
 
-
+# 3.2 - Role
 # Then create role
-resource "aws_iam_role" "reader_role" {
+resource "aws_iam_role" "eks-non-admin-role" {
   
-  name = "reader_role"
+  name = "eks-non-admin-role"
   # Like a trick, attach user defined policy first
   assume_role_policy  = jsonencode(
     {
@@ -155,20 +156,21 @@ resource "aws_iam_role" "reader_role" {
     })
 }
 
-
+# 3.3 - Role Attachment (Role - Policy)
 # then attach the role
-resource "aws_iam_role_policy_attachment" "attach_reader_policy_to_eks_reader_role" {
+resource "aws_iam_role_policy_attachment" "attach-non-admin-policy-to-non-admin-role" {
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
   
-  
-  policy_arn = aws_iam_policy.reader_policy.arn
-  role       = aws_iam_role.reader_role.name
+  policy_arn = aws_iam_policy.eks-non-admin-policy.arn
+  role       = aws_iam_role.eks-non-admin-role.name
 
 }
 
 
-
+# 3.4 - in "Pipeline Builder, add ClusterRole and ClusterRoleBinding based on"
+# LVL 2 - DEPLOYER 
+# LVL 3 - READER
 
 
 
