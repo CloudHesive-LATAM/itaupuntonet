@@ -43,6 +43,10 @@ module "eks" {
 
 module "rds" {
 
+  depends_on = [
+    module.networking
+  ]
+  
   providers = {
     aws = aws
     aws.sts_security_account = aws.sts_security_account
@@ -50,6 +54,7 @@ module "rds" {
   }
   
   source            = "../../modules/01-rds"
+  subnet_ids = module.networking[0].private_subnets_db
 
 
 }

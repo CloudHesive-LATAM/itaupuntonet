@@ -2,7 +2,7 @@
 
 variable "secret_name" {
   type = string
-  default = "itaunetsecretsandbox2"
+  default = "itaunetsecretsandbox3"
 }
 
 
@@ -41,4 +41,8 @@ variable "name" {
 variable "username" {
   type = string
   default = "dbadmin"
+}
+
+variable "subnet_ids" {
+  type = string
 }

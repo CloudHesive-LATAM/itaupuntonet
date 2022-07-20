@@ -85,6 +85,10 @@ variable "project-tags" {
   }
 }
 
+# variable "subnet_ids" {
+#   type = string
+# }
+
 # variable sts {
 #   type = object ({
 #     sts = bool
