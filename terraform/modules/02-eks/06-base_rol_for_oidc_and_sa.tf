@@ -10,6 +10,7 @@ variable "oidc_sa_name" {
     description = "sa to be used in kubernetes"
     default = "base_oidc_sa"
 }
+
 data "tls_certificate" "eks" {
   # GET OIDC
   url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer

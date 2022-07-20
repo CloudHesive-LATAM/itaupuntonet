@@ -1,7 +1,14 @@
 # ------------------------
 # IAM-NON-ROOT-SECTION
 # ------------------------ 
+# Finalmente nos tendrían que quedar 3 niveles
+# Nivel 1: Admin, el creo el clúster -> done por defecto
+# Nivel 2: Deployer, que hay que generar para los pipelines que despliegan apps
+# Nivel 3: Reader, para un determinado perfil en pipeline
+
+# 
 # [STEP 1] - Create the policy is going to be attached to the role 
+
 
 ## FOR That is necessary build the document policy
 ## after, create the related policy
@@ -106,37 +113,25 @@ resource "aws_iam_policy" "reader_policy" {
   name   = "reader_policy"  
   path   = "/"
   #policy = data.aws_iam_policy_document.read_policy_document.json
-   policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
+  policy = <<EOF
+    {
+        "Version": "2012-10-17",
+        "Statement": {
             "Effect": "Allow",
             "Action": [
                 "eks:DescribeNodegroup",
-                  "eks:ListNodegroups",
-                  "eks:DescribeCluster",
-                  "eks:ListClusters",
-                  "eks:AccessKubernetesApi",
-                  "ssm:GetParameter",
-                  "eks:ListUpdates",
-                  "eks:ListFargateProfiles"
+                "eks:ListNodegroups",
+                "eks:DescribeCluster",
+                "eks:ListClusters",
+                "eks:AccessKubernetesApi",
+                "ssm:GetParameter",
+                "eks:ListUpdates",
+                "eks:ListFargateProfiles"
             ],
             "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "iam:PassRole",
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:PassedToService": "eks.amazonaws.com"
-                }
-            }
         }
-    ]
-}
-EOF
+    }
+  EOF
 }
 
 
@@ -145,7 +140,22 @@ resource "aws_iam_role" "reader_role" {
   
   name = "reader_role"
   # Like a trick, attach user defined policy first
-  assume_role_policy = data.aws_iam_policy_document.non_root_assume_role_policy_document.json
+  assume_role_policy  = <<EOF
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::793764525616:root"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {}
+            }
+        ]
+    }
+  EOF
+  
   
 }
 
@@ -162,32 +172,7 @@ resource "aws_iam_role_policy_attachment" "attach_reader_policy_to_eks_reader_ro
 }
 
 
-resource "aws_iam_user" "reader_user" {
-  name = "reader_user"
-  path = "/"
 
-}
 
-/* resource "aws_iam_access_key" "lb" {
-  user = aws_iam_user.lb.name
-} */
 
-resource "aws_iam_user_policy" "reader_user_policy" {
-  name = "reader_user_policy"
-  user = aws_iam_user.reader_user.name
 
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "sts:AssumeRole"
-            ],
-            "Resource": "arn:aws:iam::${var.destination_account}:role/reader_role"
-        }
-    ]
-}
-EOF
-}
