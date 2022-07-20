@@ -10,7 +10,7 @@ environment="dev"
 dynamodb_table_name="$account-$reason-$project-$environment-dynamo"
 bucket_s3="$account-$reason-$project-$environment-bucket"
 profile="default"
-profile="itauchile-manpower-pipe"
+#profile="itauchile-manpower-pipe"
 key="$project-$environment-tfstate"
 
 #profile="default"

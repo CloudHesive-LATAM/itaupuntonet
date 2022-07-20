@@ -44,5 +44,5 @@ variable "username" {
 }
 
 variable "subnet_ids" {
-  type = string
+  type = list(string)
 }
