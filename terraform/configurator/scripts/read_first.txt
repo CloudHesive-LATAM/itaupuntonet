@@ -1,0 +1,42 @@
+#REFERENCES
+Resources examples: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+                    https://learnk8s.io/rbac-kubernetes
+
+
+Enabling IAM user and role access to your cluster
+Access to your cluster using AWS Identity and Access Management (IAM); 
+entities is enabled by the AWS IAM Authenticator for Kubernetes, 
+which runs on the Amazon EKS control plane. 
+The authenticator gets its configuration information from the aws-auth ConfigMap. 
+
+
+Why not ClusterAdmin 
+--------------
+
+❌ You are basically in the worst case in terms of access security. One vulnerability in your cluster and everything can be compromised.
+
+❌ The least privilege and segregation of duties principles are not followed at all.
+
+❌ But one member of your team can have an unintentional action (developer who deletes secrets thanks to writing access) that will make it difficult to work for the ops team.
+
+❌ Only cluster owner has permissions to perform task on K8s ClusterAdmin
+
+ROLES and BINDINGS 
+--------------
+
+Roles: are at a namespace level 
+ClusterRoles: are applied across the entire cluster.
+--------------
+
+RoleBinding & ClusterRoleBinding are used to connect ("bind") Role or ClusterRole to subjects (user, group, or service account).
+--------------
+
+RoleBinding grants the permissions described in a Role in a specific namespace 
+ClusterRoleBinding grants access cluster-wide.
+
+--------------
+
+When you create a cluster, only the owner (node instance role) has access to default aws-auth ConfigMap. 
+
+https://aws.amazon.com/premiumsupport/knowledge-center/eks-iam-permissions-namespaces/
+https://www.youtube.com/watch?v=EGdN21F2Jfw

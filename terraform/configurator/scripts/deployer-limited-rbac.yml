@@ -1,0 +1,63 @@
+
+# First, define a SA 
+# Then, attach it to a K8sRole
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-deployer
+  namespace: default
+---
+
+# Once done, build the RBAC permission on K8s
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: role-deployer
+  namespace: default
+rules:          # Authorization rules for this role
+  # Configure it in different API GROUPS (as lists)
+  # for example, - services, - pods, - crd, etc
+  
+  - apiGroups:  # 1st API group
+      - ''      # An empty string designates the core API group.
+    resources:
+      - services
+      - pods
+      - secrets
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch 
+      - delete
+
+   - apiGroups:  # 2st API group
+      - ["extensions, "apps"]      # An empty string designates the core API group.
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch 
+      - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rolebinding-deployer
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: role-deployer
+subjects:
+  - kind: ServiceAccount
+    name: sa-deployer
+    namespace: default
