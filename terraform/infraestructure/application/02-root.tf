@@ -41,7 +41,7 @@ module "eks" {
   
 }
 
-module "rds" {
+/* module "rds" {
 
   depends_on = [
     module.networking
@@ -57,4 +57,4 @@ module "rds" {
   subnet_ids = module.networking[0].private_subnets_db
 
 
-}
+} */

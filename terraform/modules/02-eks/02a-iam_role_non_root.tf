@@ -175,8 +175,8 @@ resource "aws_iam_role_policy_attachment" "attach-admin-policy-to-admin-role" {
 
 # [STEP 3] - Create reader group (Level 2 , Level 3 - AWS resources) 
 # 3.1 - Policy
-resource "aws_iam_policy" "eks-non-admin-policy" {
-  name   = "eks-non-admin-policy"  
+resource "aws_iam_policy" "eks-non-admin-policy2" {
+  name   = "eks-non-admin-policy2"  
   path   = "/"
   #policy = data.aws_iam_policy_document.read_policy_document.json
   policy = jsonencode(
@@ -228,7 +228,7 @@ resource "aws_iam_role_policy_attachment" "attach-non-admin-policy-to-non-admin-
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
   
-  policy_arn = aws_iam_policy.eks-non-admin-policy.arn
+  policy_arn = aws_iam_policy.eks-non-admin-policy2.arn
   role       = aws_iam_role.eks-non-admin-role.name
 
 }
