@@ -8,7 +8,7 @@ module "networking" {
   source            = "../../modules/03-networking"
   region            = var.aws_region["virginia"]
   project-tags      = var.project-tags
-  resource-name-tag = "ItauPuntoNet-Nw" # Variabilizar
+  resource-name-tag = "Prueba-Nw" # Variabilizar
   tgw_id = var.tgw_id
   create_public_nw = var.create_public_nw
 }
