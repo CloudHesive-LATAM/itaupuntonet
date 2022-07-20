@@ -119,13 +119,14 @@ resource "aws_iam_policy" "eks-admin-policy" {
   policy = jsonencode(
     {
         "Version": "2012-10-17",
-        "Statement": {
+        "Statement": [{
             "Effect": "Allow",
             "Action": [
                 "eks:*"
             ],
             "Resource": "*"
         }
+        ]
     })
 }
 
@@ -181,7 +182,7 @@ resource "aws_iam_policy" "eks-non-admin-policy" {
   policy = jsonencode(
     {
         "Version": "2012-10-17",
-        "Statement": {
+        "Statement": [{
             "Effect": "Allow",
             "Action": [
                 "eks:DescribeNodegroup",
@@ -195,6 +196,7 @@ resource "aws_iam_policy" "eks-non-admin-policy" {
             ],
             "Resource": "*"
         }
+        ]
     })
 }
 
