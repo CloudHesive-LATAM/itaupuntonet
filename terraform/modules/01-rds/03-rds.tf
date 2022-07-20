@@ -47,6 +47,9 @@ data "aws_secretsmanager_secret_version" "password" {
 }
 
 resource "aws_db_instance" "db_engine" {
+  depends_on = [
+    aws_secretsmanager_secret_version.password    
+  ]
   provider = aws #Dev
   allocated_storage    = var.allocated_storage
   engine               = var.engine
@@ -54,7 +57,7 @@ resource "aws_db_instance" "db_engine" {
   instance_class       = var.instance_class
   name                 = var.name
   username             = var.username
-  password             = [aws_secretsmanager_secret_version.password]
+  password             = "test121" #aws_secretsmanager_secret_version.password
   parameter_group_name = "default"
   skip_final_snapshot  = true
 }

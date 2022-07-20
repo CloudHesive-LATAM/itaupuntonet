@@ -9,7 +9,7 @@ project="puntonet"
 environment="dev"
 dynamodb_table_name="$account-$reason-$project-$environment-dynamo"
 bucket_s3="$account-$reason-$project-$environment-bucket"
-profile="default"
+profile="itauchile-manpower-pipe"
 key="$project-$environment-tfstate"
 
 #profile="default"
@@ -25,7 +25,7 @@ terraform init -backend-config="bucket=$bucket_s3" -backend-config="key=$key" -b
 
 terraform plan
 
-terraform apply --auto-approve
+#terraform apply --auto-approve
 sleep 2
 
 # #rm -rf .terraform*

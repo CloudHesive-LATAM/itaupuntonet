@@ -5,7 +5,11 @@
 #IAM permissions based on the service account used by the pod. 
 
 # FIRST, obtain OIDC ISSUER
-
+variable "oidc_sa_name" {
+    type = string
+    description = "sa to be used in kubernetes"
+    default = "base_oidc_sa"
+}
 data "tls_certificate" "eks" {
   # GET OIDC
   url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
@@ -29,7 +33,7 @@ data "aws_iam_policy_document" "base_oidc_assume_role_policy" {
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:default:aws-test"]
+      values   = ["system:serviceaccount:default:${var.oidc_sa_name}"]
     }
 
     principals {
