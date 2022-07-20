@@ -12,7 +12,7 @@
 
 ## FOR That is necessary build the document policy
 ## after, create the related policy
-data "aws_iam_policy_document" "eks_non_admin_eks_iam_policy_document" {
+/* data "aws_iam_policy_document" "eks_non_admin_eks_iam_policy_document" {
   # create the "json" STS policy starting with statement 
   #(statement objects >=1)
   statement {
@@ -70,7 +70,7 @@ resource "aws_iam_role_policy_attachment" "attach_non_root_policy_to_eks_role" {
   policy_arn = aws_iam_policy.eks_non_admin_eks_iam_policy.arn
   role       = aws_iam_role.eks_non_root_role.name
 
-}
+} */
 
 # READER GROUP
 
@@ -107,6 +107,70 @@ resource "aws_iam_role_policy_attachment" "attach_non_root_policy_to_eks_role" {
     }
   }
 } */
+
+# ---------------------- ADMIN GROUP DEFINITION------------------------------
+
+# [STEP 1] - Create ADMIN group (Level 1 - AWS resources) 
+# 3.1 - Policy
+resource "aws_iam_policy" "eks-admin-policy" {
+  name   = "eks-admin-policy"  
+  path   = "/"
+  #policy = data.aws_iam_policy_document.read_policy_document.json
+  policy = jsonencode(
+    {
+        "Version": "2012-10-17",
+        "Statement": {
+            "Effect": "Allow",
+            "Action": [
+                "eks:*"
+            ],
+            "Resource": "*"
+        }
+    })
+}
+
+# 3.2 - Role
+# Then create role
+resource "aws_iam_role" "eks-admin-role" {
+  
+  name = "eks-admin-role"
+  # Like a trick, attach user defined policy first
+  assume_role_policy  = jsonencode(
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::793764525616:root"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {}
+            }
+        ]
+    })
+}
+
+# 3.3 - Role Attachment (Role - Policy)
+# then attach the role
+resource "aws_iam_role_policy_attachment" "attach-admin-policy-to-admin-role" {
+  # Policies are defined as a list! it is needed to be converted to a SET.
+  # Once defined, we have to iterate over it 
+  
+  policy_arn = aws_iam_policy.eks-admin-policy.arn
+  role       = aws_iam_role.eks-admin-role.name
+
+}
+
+# ---------------------- END: ADMIN GROUP DEFINITION------------------------------
+
+# ---------------------- READER/DEPLOYER GROUP DEFINITION ------------------------------
+
+# 3.4 - in "Pipeline Builder, add ClusterRole and ClusterRoleBinding based on"
+# LVL 2 - DEPLOYER 
+# LVL 3 - READER
+
+
 
 # [STEP 3] - Create reader group (Level 2 , Level 3 - AWS resources) 
 # 3.1 - Policy
@@ -167,10 +231,11 @@ resource "aws_iam_role_policy_attachment" "attach-non-admin-policy-to-non-admin-
 
 }
 
+# ---------------------- READER/DEPLOYER GROUP DEFINITION ------------------------------
 
 # 3.4 - in "Pipeline Builder, add ClusterRole and ClusterRoleBinding based on"
-# LVL 2 - DEPLOYER 
-# LVL 3 - READER
+# LVL 1 - ADMIN -> Mapped to EKS-ADMIN-ROLE
+# -----------------------------------------------
 
-
-
+# LVL 2 - DEPLOYER -> Mapped to EKS-NON-ADMIN-ROLE
+# LVL 3 - READER -> Mapped to EKS-NON-ADMIN-ROLE
