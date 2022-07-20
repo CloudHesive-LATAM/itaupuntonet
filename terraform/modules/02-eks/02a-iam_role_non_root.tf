@@ -113,7 +113,7 @@ resource "aws_iam_policy" "reader_policy" {
   name   = "reader_policy"  
   path   = "/"
   #policy = data.aws_iam_policy_document.read_policy_document.json
-  policy = <<EOF
+  policy = jsonencode(
     {
         "Version": "2012-10-17",
         "Statement": {
@@ -130,8 +130,7 @@ resource "aws_iam_policy" "reader_policy" {
             ],
             "Resource": "*"
         }
-    }
-  EOF
+    })
 }
 
 
@@ -140,7 +139,7 @@ resource "aws_iam_role" "reader_role" {
   
   name = "reader_role"
   # Like a trick, attach user defined policy first
-  assume_role_policy  = <<EOF
+  assume_role_policy  = jsonencode(
     {
     "Version": "2012-10-17",
     "Statement": [
@@ -153,14 +152,11 @@ resource "aws_iam_role" "reader_role" {
             "Condition": {}
             }
         ]
-    }
-  EOF
-  
-  
+    })
 }
 
 
-# then attach the rle
+# then attach the role
 resource "aws_iam_role_policy_attachment" "attach_reader_policy_to_eks_reader_role" {
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 

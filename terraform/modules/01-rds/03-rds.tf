@@ -15,13 +15,11 @@ resource "aws_secretsmanager_secret" "password" {
 resource "aws_secretsmanager_secret_version" "password" {
   provider = aws.sts_security_account # shared
   secret_id = aws_secretsmanager_secret.password.id
-  secret_string = <<EOF
-  {"rds_password": "${random_password.master.result}"} 
-  EOF
+  secret_string = random_password.master.result
+  #secret_string = <<EOF
+  #{"rds_password": "${random_password.master.result}"} 
+  #EOF
 }
-
-
-
 
 
 
@@ -43,7 +41,7 @@ data "aws_secretsmanager_secret" "password" {
 
 data "aws_secretsmanager_secret_version" "password" {
   provider = aws.sts_security_account
-  secret_id = data.aws_secretsmanager_secret.password.id
+  secret_id = data.aws_secretsmanager_secret.password
 }
 
 resource "aws_db_instance" "db_engine" {
@@ -57,7 +55,7 @@ resource "aws_db_instance" "db_engine" {
   instance_class       = var.instance_class
   name                 = var.name
   username             = var.username
-  password             = "test121" #aws_secretsmanager_secret_version.password
+  password             = data.aws_secretsmanager_secret_version.password
   parameter_group_name = "default"
   skip_final_snapshot  = true
 }
