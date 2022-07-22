@@ -53,16 +53,16 @@ resource "aws_secretsmanager_secret_version" "password" {
 
 #Obtener id de la VPC creada en el modulo anterior
 
-data "aws_vpcs" "application_vpc" {
-  tags = {
-    CC = "architecture",
-    idApp = "1",
-    env = "dev",
-    responsible = "CH"
-    project = "migrationpath"
-    Name = "ItauPuntoNet-Nw-vpc-b"
-  }
-}
+# data "aws_vpcs" "application_vpc" {
+#   tags = {
+#     CC = "architecture",
+#     idApp = "1",
+#     env = "dev",
+#     responsible = "CH"
+#     project = "migrationpath"
+#     Name = "ItauPuntoNet-Nw-vpc-b"
+#   }
+# }
 
 # Obtener ids de las subredes de base de datos creadas en el modulo anterior
 
@@ -87,7 +87,7 @@ resource "aws_db_instance" "db_engine" {
   name                 = var.name
   username             = var.username
   password             = random_password.master.result #jsondecode(data.aws_secretsmanager_secret_version.passworddb.secret_string) 
-  parameter_group_name = "default"
+  #parameter_group_name = "default"
   skip_final_snapshot  = true
   db_subnet_group_name = aws_db_subnet_group.group_subnet.name
 }

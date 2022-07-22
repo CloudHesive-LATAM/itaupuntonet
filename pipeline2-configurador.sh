@@ -19,14 +19,14 @@ region="us-east-1"
 export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/STSFromCICDPipelineAccount" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 #echo $(aws sts get-caller-identity)
 
-# [STEP 3] - get cluster Kubeconfig and add to context 
+# [STEP 3] - get cluster Kubeconfig and add to context # Funciona para un unico Cluster
 clusterName=$(aws eks list-clusters --region $region | jq .clusters[0] | tr -d '"')
 aws eks update-kubeconfig --name $clusterName --region $region
 
 #kubectl describe -n kube-system configmap/aws-auth
 
 kubectl apply -f terraform/configurator/rbac/rbac_reader.yaml
-kubectl apply -f terraform/configurator/rbac/rbac_deployer.yaml
+#kubectl apply -f terraform/configurator/rbac/rbac_deployer.yaml
 
 # [STEP 4] - Now, its time to play
 # non_root_role="non-root-eks-role-dev"
@@ -44,9 +44,9 @@ kubectl apply -f terraform/configurator/rbac/rbac_deployer.yaml
 
 # # # [STEP 5] - Patch K8s auth CMap
 
-export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/eks-non-admin-role" --role-session-name deployereks --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/eks-non-admin-role" --role-session-name reader --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 
-# STEP 0 - Clean YAML CM RBAC 
+# STEP 0 - Clean YAML CM RBAC --- Seguis siendo systems:master
 kubectl apply -f terraform/configurator/rbac/aws-auth-cm.yaml
 
 # ROLE 1 - DEPLOYER

@@ -2,7 +2,7 @@
 
 variable "secret_name" {
   type = string
-  default = "itaunetsecretsandbox3"
+  default = "itaunetsecretsandbox4"
 }
 
 
@@ -29,7 +29,7 @@ variable "engine" {
 variable "instance_class" {
   type        = string
   description = "Type of RDS Instance"
-  default     = "m5.large" 
+  default     = "db.t3.micro" 
 }
 
 variable "name" {
