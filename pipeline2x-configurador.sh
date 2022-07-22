@@ -9,7 +9,7 @@ project="puntonet"
 environment="dev"
 dynamodb_table_name="$account-$reason-$project-$environment-dynamo"
 bucket_s3="$account-$reason-$project-$environment-bucket"
-profile="sandbox-pipe"
+profile="itauchile-manpower-pipe"
 key="$project-$environment-tfstate"
 region="us-east-1"
 
@@ -19,40 +19,14 @@ region="us-east-1"
 export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/STSFromCICDPipelineAccount" --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 #echo $(aws sts get-caller-identity)
 
-# [STEP 3] - get cluster Kubeconfig and add to context 
+# [STEP 3] - get cluster Kubeconfig and add to context # Funciona para un unico Cluster
 clusterName=$(aws eks list-clusters --region $region | jq .clusters[0] | tr -d '"')
 aws eks update-kubeconfig --name $clusterName --region $region
 
 #kubectl describe -n kube-system configmap/aws-auth
 
-kubectl apply -f terraform/configurator/rbac/aws-auth-cm.yaml
 kubectl apply -f terraform/configurator/rbac/rbac_reader.yaml
-kubectl apply -f terraform/configurator/rbac/rbac_deployer.yaml
-
-# LIMPIAR
-kubectl apply -f terraform/configurator/rbac/aws-auth-cm.yaml
-
-# ROLE 1 - DEPLOYER
-ROLE="    - rolearn: arn:aws:iam::${account}:role/eks-deployer-tf-role\n      username: deployer\n      groups:\n        - deployer"
-kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml
-kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
-
-# ROLE 2 - READER
-ROLE="    - rolearn: arn:aws:iam::${account}:role/eks-reader-tf-role\n      username: reader\n      groups:\n        - reader"
-kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml
-kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
-
-kubectl describe -n kube-system configmap/aws-auth
-
-
-export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/eks-reader-tf-role" --role-session-name reader --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
-echo $(aws sts get-caller-identity)
-aws eks update-kubeconfig --name $clusterName --region $region
-
-export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/eks-deployer-tf-role" --role-session-name deployer --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
-echo $(aws sts get-caller-identity)
-aws eks update-kubeconfig --name $clusterName --region $region
-
+#kubectl apply -f terraform/configurator/rbac/rbac_deployer.yaml
 
 # [STEP 4] - Now, its time to play
 # non_root_role="non-root-eks-role-dev"
@@ -68,25 +42,22 @@ aws eks update-kubeconfig --name $clusterName --region $region
 #kubectl get -n kube-system configmap/aws-auth -o yaml
 
 
-# # # [STEP 5] - Patch K8s auth CMap # Funciona para un unico Cluster
+# # # [STEP 5] - Patch K8s auth CMap
 
+export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts --profile=$profile assume-role --role-arn "arn:aws:iam::308582334619:role/eks-non-admin-role" --role-session-name reader --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 
+# STEP 0 - Clean YAML CM RBAC --- Seguis siendo systems:master
+kubectl apply -f terraform/configurator/rbac/aws-auth-cm.yaml
 
-kubectl get pods -A
+# ROLE 1 - DEPLOYER
+ROLE="    - rolearn: arn:aws:iam::${account}:role/eks-non-admin-role\n      username: deployer\n      groups:\n        - deployer"
+kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml
+kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
 
-kubectl run nginx2 --image=nginx
-# # STEP 0 - Clean YAML CM RBAC 
-# kubectl apply -f terraform/configurator/rbac/aws-auth-cm.yaml
-
-# # ROLE 1 - DEPLOYER
-# ROLE="    - rolearn: arn:aws:iam::${account}:role/eks-non-admin-role\n      username: deployer\n      groups:\n        - deployer"
-# kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml
-# kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
-
-# # ROLE 2 - READER
-# ROLE="    - rolearn: arn:aws:iam::${account}:role/eks-non-admin-role\n      username: reader\n      groups:\n        - reader"
-# kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml
-# kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
+# ROLE 2 - READER
+ROLE="    - rolearn: arn:aws:iam::${account}:role/eks-non-admin-role\n      username: reader\n      groups:\n        - reader"
+kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml
+kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
 
 
 # kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml

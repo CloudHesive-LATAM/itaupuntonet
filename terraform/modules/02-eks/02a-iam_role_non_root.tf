@@ -112,8 +112,8 @@ resource "aws_iam_role_policy_attachment" "attach_non_root_policy_to_eks_role" {
 
 # [STEP 1] - Create ADMIN group (Level 1 - AWS resources) 
 # 3.1 - Policy
-resource "aws_iam_policy" "eks-admin-policy" {
-  name   = "eks-admin-policy"  
+resource "aws_iam_policy" "eks-get-kubeconfig-policy" {
+  name   = "eks-get-kubeconfig-policy"  
   path   = "/"
   #policy = data.aws_iam_policy_document.read_policy_document.json
   policy = jsonencode(
@@ -122,19 +122,19 @@ resource "aws_iam_policy" "eks-admin-policy" {
         "Statement": [{
             "Effect": "Allow",
             "Action": [
-                "eks:*"
+                "eks:DescribeCluster"
             ],
             "Resource": "*"
         }
         ]
     })
-}
+} 
 
 # 3.2 - Role
 # Then create role
 resource "aws_iam_role" "eks-admin-role" {
   
-  name = "eks-admin-role"
+  name = "eks-admin-tf-role"
   # Like a trick, attach user defined policy first
   assume_role_policy  = jsonencode(
     {
@@ -143,7 +143,7 @@ resource "aws_iam_role" "eks-admin-role" {
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::793764525616:root"
+                "AWS": ["arn:aws:iam::793764525616:root", "arn:aws:iam::308582334619:root"]
             },
             "Action": "sts:AssumeRole",
             "Condition": {}
@@ -158,7 +158,7 @@ resource "aws_iam_role_policy_attachment" "attach-admin-policy-to-admin-role" {
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
   
-  policy_arn = aws_iam_policy.eks-admin-policy.arn
+  policy_arn = aws_iam_policy.eks-get-kubeconfig-policy.arn
   role       = aws_iam_role.eks-admin-role.name
 
 }
@@ -175,7 +175,7 @@ resource "aws_iam_role_policy_attachment" "attach-admin-policy-to-admin-role" {
 
 # [STEP 3] - Create reader group (Level 2 , Level 3 - AWS resources) 
 # 3.1 - Policy
-resource "aws_iam_policy" "eks-non-admin-policy2" {
+/* resource "aws_iam_policy" "eks-non-admin-policy2" {
   name   = "eks-non-admin-policy2"  
   path   = "/"
   #policy = data.aws_iam_policy_document.read_policy_document.json
@@ -198,13 +198,13 @@ resource "aws_iam_policy" "eks-non-admin-policy2" {
         }
         ]
     })
-}
+} */
 
 # 3.2 - Role
 # Then create role
-resource "aws_iam_role" "eks-non-admin-role" {
+resource "aws_iam_role" "eks-deployer-role" {
   
-  name = "eks-non-admin-role"
+  name = "eks-deployer-tf-role"
   # Like a trick, attach user defined policy first
   assume_role_policy  = jsonencode(
     {
@@ -213,7 +213,7 @@ resource "aws_iam_role" "eks-non-admin-role" {
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::793764525616:root"
+                "AWS": ["arn:aws:iam::793764525616:root", "arn:aws:iam::308582334619:root"]
             },
             "Action": "sts:AssumeRole",
             "Condition": {}
@@ -222,16 +222,54 @@ resource "aws_iam_role" "eks-non-admin-role" {
     })
 }
 
+resource "aws_iam_role_policy_attachment" "attach1" {
+  # Policies are defined as a list! it is needed to be converted to a SET.
+  # Once defined, we have to iterate over it 
+  
+  policy_arn = aws_iam_policy.eks-get-kubeconfig-policy.arn
+  role       = aws_iam_role.eks-deployer-role.name
+
+}
+
+resource "aws_iam_role" "eks-reader-role" {
+  
+  name = "eks-reader-tf-role"
+  # Like a trick, attach user defined policy first
+  assume_role_policy  = jsonencode(
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": ["arn:aws:iam::793764525616:root", "arn:aws:iam::308582334619:root"]
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {}
+            }
+        ]
+    })
+}
+
+resource "aws_iam_role_policy_attachment" "attach2" {
+  # Policies are defined as a list! it is needed to be converted to a SET.
+  # Once defined, we have to iterate over it 
+  
+  policy_arn = aws_iam_policy.eks-get-kubeconfig-policy.arn
+  role       = aws_iam_role.eks-reader-role.name
+
+}
+
 # 3.3 - Role Attachment (Role - Policy)
 # then attach the role
-resource "aws_iam_role_policy_attachment" "attach-non-admin-policy-to-non-admin-role" {
+/* resource "aws_iam_role_policy_attachment" "attach-non-admin-policy-to-non-admin-role" {
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
   
   policy_arn = aws_iam_policy.eks-non-admin-policy2.arn
   role       = aws_iam_role.eks-non-admin-role.name
 
-}
+} */
 
 # ---------------------- READER/DEPLOYER GROUP DEFINITION ------------------------------
 

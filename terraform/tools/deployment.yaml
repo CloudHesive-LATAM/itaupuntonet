@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgre-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: postgre
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: postgre
+    spec:
+      containers:
+      - name: postgre
+        image: dpetrocelli/pgcli
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5432
+ 
+        # env:
+        #   - name: POSTGRES_DB
+        #     value: db0
+        #   - name: POSTGRES_USER
+        #     value: mendix
+        #   - name: POSTGRES_PASSWORD
+        #     value: mendix
+    #     volumeMounts:
+    #       - mountPath: "/var/lib/postgresql/data"
+    #         name: "mendix-pgdata"
+    # volumes:
+    #   - hostPath:
+    #       path: "/home/docker/pgdata"
+    #     name: mendix-pgdata
