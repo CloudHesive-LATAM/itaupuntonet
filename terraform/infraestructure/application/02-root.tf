@@ -63,3 +63,16 @@ module "rds" {
 
 
 } 
+
+
+module "redis" {
+  providers = {
+    aws = aws
+    aws.sts_security_account = aws.sts_security_account
+    random = random
+  }
+  source            = "../../modules/05-elasticforredis"
+  cidr_block = var.cidr_block
+  vpc_id = var.nw_configurations["vpc_id"]
+
+} 

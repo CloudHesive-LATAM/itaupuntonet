@@ -1,7 +1,4 @@
 resource "aws_security_group" "EKS_SG" {
-  
-  
-
   name        = var.aws_eks_sg
   description = var.aws_eks_sg_description
   vpc_id      = var.vpc_id

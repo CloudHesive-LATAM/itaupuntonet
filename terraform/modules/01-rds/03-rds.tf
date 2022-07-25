@@ -33,7 +33,7 @@ resource "aws_db_instance" "db_engine" {
   engine               = var.engine
   engine_version       = var.engine_version
   instance_class       = var.instance_class
-  name                 = var.name
+  db_name                 = var.name
   username             = var.username
   password             = random_password.master.result #jsondecode(data.aws_secretsmanager_secret_version.passworddb.secret_string) 
   skip_final_snapshot  = true
