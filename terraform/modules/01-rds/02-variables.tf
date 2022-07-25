@@ -14,6 +14,16 @@ variable "allocated_storage" {
   default     = "100" 
 }
 
+variable "vpc_id" {
+  type        = string
+  description = "ID of VPC"
+}
+
+variable "cidr_block" {
+  type        = list(string)
+  description = "CIDR Block"
+}
+
 variable "engine_version" {
   type        = string
   description = "DB engine version"
@@ -47,6 +57,6 @@ variable "subnet_ids" {
   type = list(string)
 }
 
-variable "sgid_database" {
-  type = string
-}
+# variable "sgid_database" {
+#   type = string
+# }

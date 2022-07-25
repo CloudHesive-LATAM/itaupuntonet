@@ -26,7 +26,8 @@ terraform init -backend-config="bucket=$bucket_s3" -backend-config="key=$key" -b
 
 terraform plan
 
-terraform apply --auto-approve
+terraform destroy -auto-approve
+#terraform apply --auto-approve
 sleep 2
 
 rm -rf .terraform*

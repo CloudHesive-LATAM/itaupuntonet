@@ -34,34 +34,33 @@ variable "parameters_and_configurations" {
 variable "create_public_nw" {
   type = string
   description = "create public nw "
-  default = true
 }
 
 variable "use_precreated_kms_encryption_key" {
   type        = bool
   description = "Use or not KMS"
-  default = true
 }
 
 variable "tgw_id" {
   type = string
   description = "TG ID from main account"
-  default = "tgw-048609c6fa8097f5c"
 }
+
 variable "create_nw" {
   type = bool
-  default = false
 }
 
 variable "nw_configurations" {
-  description = "if network has been already created, define parameters :D "
+  description = "if network has already been created, define parameters :D "
   type = object ({
     vpc_id = string
-    private_subnets = list(string)
+    app_private_subnets = list(string)
+    db_database_subnets = list(string)
   })
   default = {
-    vpc_id = "vpc-0c296b94a9ba05cba"
-    private_subnets = ["subnet-04165a51d01575857", "subnet-031ff6bf0935d928b","subnet-028e67b5f95981dd4"]
+    vpc_id = "vpc-036e79118b8a67349"
+    app_private_subnets = ["subnet-048c0ee4bb961b0ac", "subnet-0ab516a9b97ad1970"]
+    db_database_subnets = ["subnet-0732719fd37b83249, subnet-0abc37921b6b0bc71"]
   }
 
 }
@@ -83,6 +82,11 @@ variable "project-tags" {
     idApp = 1
     responsible = "CH"
   }
+}
+
+variable "cidr_block" {
+  description = "CIDR block to vpc1."
+  type        = list(string)
 }
 
 # variable "subnet_ids" {
@@ -205,7 +209,7 @@ variable "aws_region" {
 #   default     = "dynamo-tfstate"
 # }
 
-# variable "vpc_cidr_block" {
+# variable "vpc__block" {
 #   description = "CIDR block to vpc1."
 #   type        = string
 #   default     = "10.0.0.0/16"
@@ -344,7 +348,7 @@ variable "aws_region" {
 # }
 
 # variable "cluster_endpoint_public_access_cidrs" {
-#   description = "List of CIDR blocks which can access the Amazon EKS public API server endpoint."
+#   description = "List of  blocks which can access the Amazon EKS public API server endpoint."
 #   type        = list(string)
 #   default     = ["0.0.0.0/0"]
 # }

@@ -34,7 +34,7 @@ resource "aws_eks_node_group" "eks-ng" {
   cluster_name    = aws_eks_cluster.eks-cluster.name
   node_group_name = var.eks_ng_name
   node_role_arn   = aws_iam_role.eks_worker_role.arn
-  subnet_ids      = var.private_subnets
+  subnet_ids      = var.app_private_subnets
   capacity_type   = var.eks_worker_spot["spot"]
   tags            = merge(var.project-tags, { Name = "${var.resource-name-tag}-ng-1" }, )
 

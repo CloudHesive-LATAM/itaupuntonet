@@ -23,6 +23,12 @@ variable "vpc_cidr_block" {
 
 }
 
+variable "app_private_subnets" {
+  type        = list(string)
+  description = "Private Subnets"
+  default     = []
+}
+
 variable "destination_account" {
     type = string
     description = "destination account to be used as parameter"
