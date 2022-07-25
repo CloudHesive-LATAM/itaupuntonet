@@ -26,8 +26,21 @@ variable "vpc_cidr_block" {
 variable "destination_account" {
     type = string
     description = "destination account to be used as parameter"
+    default = "308582334619"
+}
+
+variable "cicd_account" {
+    type = string
+    description = "destination account to be used as parameter"
     default = "793764525616"
 }
+
+variable "cicd_role" {
+    type = string
+    description = "Role to be used to 'jump' to destination account and be able to consume EKS"
+    default = "STSBaseRoleFromCICDEc2RunnerToGeneralCICDPipelines"
+}
+
 variable "eks_non_admin_IAM_STS_policy" {
   default = {
     name        = "EKS-Non-Admin-STS-policy"
