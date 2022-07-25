@@ -1,0 +1,5 @@
+FROM ubuntu:latest
+RUN apt-get update 
+RUN apt-get install telnet -y
+RUN apt-get -y install postgresql
+ENTRYPOINT ["/bin/sleep", "6000"]

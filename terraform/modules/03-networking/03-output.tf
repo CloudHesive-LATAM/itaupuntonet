@@ -28,3 +28,10 @@ output "private_subnets_db" {
   value       = values(aws_subnet.poc_privateDB)[*].id
   description = "Private Subnets DB ID"
 }
+
+output "sgid_database" {
+
+  value = aws_security_group.database_instance.id
+  description = "ID of database SG" 
+  
+}

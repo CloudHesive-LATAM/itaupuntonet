@@ -27,34 +27,36 @@ module "eks" {
     aws.sts_security_account = aws.sts_security_account
     random = random
     local = local
+    #tls = tls
   } 
 
   use_precreated_kms_encryption_key = var.use_precreated_kms_encryption_key
   kms_encryption_arn = var.kms_encryption_arn
   # tam
 
-  vpc_cidr_block = module.networking[0].cidr_block
-  vpc_id = var.create_nw == true ? module.networking[0].vpc_id : var.nw_configurations["vpc_id"]
+  vpc_cidr_block = module.networking.cidr_block #module.networking[0].cidr_block
+  vpc_id = var.create_nw == true ? module.networking.vpc_id : var.nw_configurations["vpc_id"] #true ? module.networking[0].vpc_id : var.nw_configurations["vpc_id"]
   project-tags      = var.project-tags
   resource-name-tag = "eks-"
-  private_subnets =  var.create_nw == true ? module.networking[0].private_subnets : var.nw_configurations["private_subnets"]
+  private_subnets =  var.create_nw == true ? module.networking.private_subnets : var.nw_configurations["private_subnets"]#var.create_nw == true ? module.networking[0].private_subnets : var.nw_configurations["private_subnets"]
   
 }
 
-module "rds" {
+# module "rds" {
 
-  depends_on = [
-    module.networking
-  ]
+#   depends_on = [
+#     module.networking
+#   ]
   
-  providers = {
-    aws = aws
-    aws.sts_security_account = aws.sts_security_account
-    random = random
-  }
+#   providers = {
+#     aws = aws
+#     aws.sts_security_account = aws.sts_security_account
+#     random = random
+#   }
   
-  source            = "../../modules/01-rds"
-  subnet_ids = module.networking[0].private_subnets_db
+#   source            = "../../modules/01-rds"
+#   subnet_ids = module.networking[0].private_subnets_db
+#   sgid_database = module.networking[0].sgid_database
 
 
-} 
+# } 

@@ -46,3 +46,7 @@ variable "username" {
 variable "subnet_ids" {
   type = list(string)
 }
+
+variable "sgid_database" {
+  type = string
+}

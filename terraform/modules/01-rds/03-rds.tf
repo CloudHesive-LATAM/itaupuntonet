@@ -90,4 +90,5 @@ resource "aws_db_instance" "db_engine" {
   #parameter_group_name = "default"
   skip_final_snapshot  = true
   db_subnet_group_name = aws_db_subnet_group.group_subnet.name
+  vpc_security_group_ids = [var.sgid_database]
 }
