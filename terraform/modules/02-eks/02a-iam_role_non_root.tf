@@ -4,25 +4,25 @@
 # At least DescribeCluster is going to be needed to update KubeConfig 
 # 3.1 - Create Policy
 resource "aws_iam_policy" "eks-get-kubeconfig-policy" {
-  name   = "eks-get-kubeconfig-policy"  
-  path   = "/"
+  name = "eks-get-kubeconfig-policy"
+  path = "/"
   #policy = data.aws_iam_policy_document.read_policy_document.json
   policy = jsonencode(
     {
-        "Version": "2012-10-17",
-        "Statement": [{
-            "Effect": "Allow",
-            "Action": [
-                "eks:DescribeCluster"
-            ],
-            "Resource": "*"
+      "Version" : "2012-10-17",
+      "Statement" : [{
+        "Effect" : "Allow",
+        "Action" : [
+          "eks:DescribeCluster"
+        ],
+        "Resource" : "*"
         }
-        ]
-    })
-} 
+      ]
+  })
+}
 
 data "aws_iam_policy_document" "shared-sts-policy" {
-  
+
   statement {
     effect  = var.eks_master_IAM_policy_parameters["effect"]  # Allow
     actions = var.eks_master_IAM_policy_parameters["actions"] # sts assume role
@@ -44,23 +44,23 @@ data "aws_iam_policy_document" "shared-sts-policy" {
 # 3.2 - Role
 # Then create role
 resource "aws_iam_role" "eks-admin-role" {
-  
+
   name = "eks-admin-tf-role"
   # Like a trick, attach user defined policy first
-  assume_role_policy  = jsonencode(
+  assume_role_policy = jsonencode(
     {
-    "Version": "2012-10-17",
-    "Statement": [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": ["arn:aws:iam::${var.cicd_account}:role/${var.cicd_role}", "arn:aws:iam::${var.destination_account}:root"]
-            },
-            "Action": "sts:AssumeRole",
-            "Condition": {}
-            }
-        ]
-    })
+          "Effect" : "Allow",
+          "Principal" : {
+            "AWS" : ["arn:aws:iam::${var.cicd_account}:role/${var.cicd_role}", "arn:aws:iam::${var.destination_account}:root"]
+          },
+          "Action" : "sts:AssumeRole",
+          "Condition" : {}
+        }
+      ]
+  })
 }
 
 # 3.3 - Role Attachment (Role - Policy)
@@ -68,7 +68,7 @@ resource "aws_iam_role" "eks-admin-role" {
 resource "aws_iam_role_policy_attachment" "attach-admin-policy-to-admin-role" {
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
-  
+
   policy_arn = aws_iam_policy.eks-get-kubeconfig-policy.arn
   role       = aws_iam_role.eks-admin-role.name
 
@@ -114,58 +114,58 @@ resource "aws_iam_role_policy_attachment" "attach-admin-policy-to-admin-role" {
 # 3.2 - Role
 # Then create role
 resource "aws_iam_role" "eks-deployer-role" {
-  
+
   name = "eks-deployer-tf-role"
   # Like a trick, attach user defined policy first
-  assume_role_policy  = jsonencode(
+  assume_role_policy = jsonencode(
     {
-    "Version": "2012-10-17",
-    "Statement": [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": ["arn:aws:iam::793764525616:root", "arn:aws:iam::308582334619:root"]
-            },
-            "Action": "sts:AssumeRole",
-            "Condition": {}
-            }
-        ]
-    })
+          "Effect" : "Allow",
+          "Principal" : {
+            "AWS" : ["arn:aws:iam::793764525616:root", "arn:aws:iam::308582334619:root"]
+          },
+          "Action" : "sts:AssumeRole",
+          "Condition" : {}
+        }
+      ]
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "attach1" {
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
-  
+
   policy_arn = aws_iam_policy.eks-get-kubeconfig-policy.arn
   role       = aws_iam_role.eks-deployer-role.name
 
 }
 
 resource "aws_iam_role" "eks-reader-role" {
-  
+
   name = "eks-reader-tf-role"
   # Like a trick, attach user defined policy first
-  assume_role_policy  = jsonencode(
+  assume_role_policy = jsonencode(
     {
-    "Version": "2012-10-17",
-    "Statement": [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": ["arn:aws:iam::793764525616:root", "arn:aws:iam::308582334619:root"]
-            },
-            "Action": "sts:AssumeRole",
-            "Condition": {}
-            }
-        ]
-    })
+          "Effect" : "Allow",
+          "Principal" : {
+            "AWS" : ["arn:aws:iam::793764525616:root", "arn:aws:iam::308582334619:root"]
+          },
+          "Action" : "sts:AssumeRole",
+          "Condition" : {}
+        }
+      ]
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "attach2" {
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
-  
+
   policy_arn = aws_iam_policy.eks-get-kubeconfig-policy.arn
   role       = aws_iam_role.eks-reader-role.name
 

@@ -14,13 +14,13 @@ resource "aws_security_group" "EKS_SG" {
   } */
 
   ingress {
-      description = "Allow Ingress ALL from VPC CIDR"
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      #cidr_blocks = ["0.0.0.0/0"]
-      cidr_blocks = [var.vpc_cidr_block]
-    }
+    description = "Allow Ingress ALL from VPC CIDR"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    #cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.vpc_cidr_block]
+  }
 
   # opcional
   egress {

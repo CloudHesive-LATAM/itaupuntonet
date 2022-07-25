@@ -19,8 +19,8 @@
 # [STEP 1] - Create AWS Launch Template (IF SPOT)
 resource "aws_launch_template" "ec2_for_eks" {
 
-  
-  
+
+
   # depends_on = [
   #   data.aws_ec2_spot_price.spot_current_price
   # ]
@@ -38,7 +38,7 @@ resource "aws_launch_template" "ec2_for_eks" {
     }
   }
 
-  update_default_version = true #Actualiza default_version a la última_versión en terraform apply 
+  update_default_version = true                          #Actualiza default_version a la última_versión en terraform apply 
   key_name               = aws_key_pair.ec2-key.key_name # Reemplazar por la de Cuenta Security
 
 
@@ -85,9 +85,9 @@ resource "aws_launch_template" "ec2_for_eks" {
 
 # [STEP 2] - Retrieve data as variable
 data "aws_launch_template" "ec2_for_eks" {
-  
-  
-  
+
+
+
   name       = aws_launch_template.ec2_for_eks.name
   depends_on = [aws_launch_template.ec2_for_eks]
 }

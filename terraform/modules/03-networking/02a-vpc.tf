@@ -23,8 +23,8 @@ resource "aws_vpc" "poc_vpc" {
 # ------------------------------------
 #Public Subnet 
 resource "aws_subnet" "poc_public" {
-  for_each       = var.create_public_nw == true ?  { for i, v in var.PublicSubnet-List : i => v } : {}
- 
+  for_each = var.create_public_nw == true ? { for i, v in var.PublicSubnet-List : i => v } : {}
+
   #for_each                = { for i, v in var.PublicSubnet-List : i => v } #por cada valor de objeto en lista de variables genera un nuevo objeto.
   vpc_id                  = aws_vpc.poc_vpc.id
   cidr_block              = cidrsubnet(var.vpc_cidr, each.value.newbits, each.value.netnum)
@@ -42,15 +42,15 @@ resource "aws_subnet" "poc_public" {
 #------------------------------------
 # Public Route Table 
 resource "aws_route_table" "public_route_table" {
-  count = var.create_public_nw == true ? 1 : 0
-    vpc_id = aws_vpc.poc_vpc.id
+  count  = var.create_public_nw == true ? 1 : 0
+  vpc_id = aws_vpc.poc_vpc.id
 
-    route {
-      cidr_block = "0.0.0.0/0"
-      gateway_id = aws_internet_gateway.ig[0].id
-    }
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.ig[0].id
+  }
 
-    tags = merge(var.project-tags, { Name = "${var.resource-name-tag}-rtpub" }, "")
+  tags = merge(var.project-tags, { Name = "${var.resource-name-tag}-rtpub" }, "")
 }
 
 #-------------------------------------
@@ -72,7 +72,7 @@ resource "aws_route_table_association" "public" {
 #----------------------
 resource "aws_internet_gateway" "ig" {
   count = var.create_public_nw == true ? 1 : 0
-  
+
   vpc_id = aws_vpc.poc_vpc.id
 
   tags = merge(var.project-tags, { Name = "${var.resource-name-tag}-ig-" }, )
@@ -88,8 +88,8 @@ resource "aws_internet_gateway" "ig" {
 
 # private Subnet 
 resource "aws_subnet" "poc_private" {
-  
-  
+
+
   for_each                = { for i, v in var.PrivateSubnet-List : i => v }
   vpc_id                  = aws_vpc.poc_vpc.id
   cidr_block              = cidrsubnet(var.vpc_cidr, each.value.newbits, each.value.netnum)
@@ -111,8 +111,8 @@ resource "aws_subnet" "poc_private" {
 
 # PrivateDB Subnet 
 resource "aws_subnet" "poc_privateDB" {
-  
-  
+
+
   for_each                = { for i, v in var.PrivateSubnetdb-List : i => v }
   vpc_id                  = aws_vpc.poc_vpc.id
   map_public_ip_on_launch = false
@@ -128,7 +128,7 @@ resource "aws_subnet" "poc_privateDB" {
 # ------------------------------------
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw" {
-  
+
   transit_gateway_id = var.tgw_id
   vpc_id             = aws_vpc.poc_vpc.id
   subnet_ids         = [aws_subnet.poc_private[0].id, aws_subnet.poc_privateDB[1].id]
@@ -144,7 +144,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw" {
 # ------------------------------------
 
 resource "aws_route_table" "private_route_table" {
-  
+
   depends_on = [
     aws_ec2_transit_gateway_vpc_attachment.tgw
   ]
@@ -162,7 +162,7 @@ resource "aws_route_table" "private_route_table" {
 
 # PrivateDB Route Table 
 resource "aws_route_table" "privatedb_route_table" {
-  
+
   depends_on = [
     aws_ec2_transit_gateway_vpc_attachment.tgw
   ]
@@ -196,7 +196,7 @@ resource "aws_route_table" "privatedb_route_table" {
 # ------------------------------------
 
 resource "aws_route_table_association" "private" {
-  
+
   depends_on = [
     aws_route_table.private_route_table
   ]
@@ -207,7 +207,7 @@ resource "aws_route_table_association" "private" {
 
 # PrivateDB Subnets Association 
 resource "aws_route_table_association" "private_db" {
-  
+
   depends_on = [
     aws_route_table.privatedb_route_table
   ]

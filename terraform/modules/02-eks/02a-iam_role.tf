@@ -10,8 +10,8 @@
 data "aws_iam_policy_document" "master_assume_role_policy_document" {
   # create the "json" policy starting with statement 
   #(statement objects >=1)
-  
-  
+
+
   statement {
     effect  = var.eks_master_IAM_policy_parameters["effect"]  # Allow
     actions = var.eks_master_IAM_policy_parameters["actions"] # sts assume role
@@ -27,9 +27,9 @@ data "aws_iam_policy_document" "master_assume_role_policy_document" {
 
 # [STEP 2] - Create the role and name it / Add the STS policy
 resource "aws_iam_role" "eks_master_role" {
-  
-  
-  
+
+
+
   depends_on = [
     data.aws_iam_policy_document.master_assume_role_policy_document
   ]
@@ -41,9 +41,9 @@ resource "aws_iam_role" "eks_master_role" {
 
 # [STEP 3] - Attach "AWS managed" policies to the role 
 resource "aws_iam_role_policy_attachment" "eks_master_policies_to_be_attached" {
-  
-  
-  
+
+
+
   # Policies are defined as a list! it is needed to be converted to a SET.
   # Once defined, we have to iterate over it 
   depends_on = [
@@ -62,8 +62,8 @@ resource "aws_iam_role_policy_attachment" "eks_master_policies_to_be_attached" {
 
 # [STEP 1] - Create document policy (based on variables)
 data "aws_iam_policy_document" "worker_assume_role_policy_document" {
-  
-  
+
+
 
   statement {
     effect  = var.eks_worker_IAM_policy_parameters["effect"]
@@ -77,9 +77,9 @@ data "aws_iam_policy_document" "worker_assume_role_policy_document" {
 
 # [STEP 2] - Create role and name it
 resource "aws_iam_role" "eks_worker_role" {
-  
-  
-  
+
+
+
   depends_on = [
     data.aws_iam_policy_document.worker_assume_role_policy_document
   ]
@@ -89,8 +89,8 @@ resource "aws_iam_role" "eks_worker_role" {
 
 # [STEP 3] - Attach inline policies
 resource "aws_iam_role_policy_attachment" "eks_worker_policies_to_be_attached" {
-  
-  
+
+
 
 
   for_each   = toset(var.eks_worker_IAM_policy_parameters["policies"])

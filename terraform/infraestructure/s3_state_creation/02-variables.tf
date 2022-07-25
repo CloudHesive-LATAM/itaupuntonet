@@ -1,5 +1,5 @@
 variable "bucket_state_name" {
-  type = string
+  type    = string
   default = "itaunetinfrasandbox"
 }
 

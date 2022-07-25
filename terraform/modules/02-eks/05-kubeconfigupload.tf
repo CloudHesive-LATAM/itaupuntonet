@@ -1,6 +1,6 @@
 # [STEP 1] - Use data TO OBTAIN TOKEN 
 data "aws_eks_cluster_auth" "cluster_auth" {
-  
+
   name = aws_eks_cluster.eks-cluster.name
 }
 
@@ -23,6 +23,6 @@ resource "local_file" "kubeconfig" {
     clusterca    = aws_eks_cluster.eks-cluster.certificate_authority[0].data,
     endpoint     = aws_eks_cluster.eks-cluster.endpoint,
     region       = "us-east-1"
-    })
-  filename          = "${path.module}/scripts/kubeconfig-test"
+  })
+  filename = "${path.module}/scripts/kubeconfig-test"
 }

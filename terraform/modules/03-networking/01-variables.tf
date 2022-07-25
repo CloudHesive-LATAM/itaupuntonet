@@ -1,7 +1,7 @@
 variable "create_public_nw" {
-  type = string
+  type        = string
   description = "create public nw "
-  
+
 }
 
 # TGW ID 

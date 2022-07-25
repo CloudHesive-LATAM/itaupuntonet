@@ -5,14 +5,14 @@
 # Fin required providers
 
 variable "role_arn_security_account" {
-  type = string 
-  
+  type = string
+
 }
 variable "kms_encryption_arn" {
   type        = string
   description = "ARN of ksm key to apply S3 Server Side Encryption"
-  
-} 
+
+}
 /* 
 variable "parameters_and_configurations" {
   type        = object ({
@@ -32,7 +32,7 @@ variable "parameters_and_configurations" {
 } */
 
 variable "create_public_nw" {
-  type = string
+  type        = string
   description = "create public nw "
 }
 
@@ -42,7 +42,7 @@ variable "use_precreated_kms_encryption_key" {
 }
 
 variable "tgw_id" {
-  type = string
+  type        = string
   description = "TG ID from main account"
 }
 
@@ -52,34 +52,34 @@ variable "create_nw" {
 
 variable "nw_configurations" {
   description = "if network has already been created, define parameters :D "
-  type = object ({
-    vpc_id = string
+  type = object({
+    vpc_id              = string
     app_private_subnets = list(string)
     db_database_subnets = list(string)
   })
   default = {
-    vpc_id = "vpc-036e79118b8a67349"
+    vpc_id              = "vpc-036e79118b8a67349"
     app_private_subnets = ["subnet-048c0ee4bb961b0ac", "subnet-0ab516a9b97ad1970"]
     db_database_subnets = ["subnet-0732719fd37b83249, subnet-0abc37921b6b0bc71"]
   }
 
 }
 variable "project-tags" {
-  type        = object ({
-    CC = string
-    project = string
-    env = string
-    idApp = number
+  type = object({
+    CC          = string
+    project     = string
+    env         = string
+    idApp       = number
     responsible = string
   })
-  
+
   description = "project Tags using among services"
 
   default = {
-    CC = "architecture"
-    project = "migrationpath"
-    env = "dev"
-    idApp = 1
+    CC          = "architecture"
+    project     = "migrationpath"
+    env         = "dev"
+    idApp       = 1
     responsible = "CH"
   }
 }
@@ -136,7 +136,7 @@ variable "aws_s3_tfstate" {
 
 # variable "aws_provider_profile" {
 #   type    = string
-  
+
 # }
 
 ##AWS Region

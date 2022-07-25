@@ -1,8 +1,8 @@
 # Create Security Group
 resource "aws_security_group" "worker_ec2_sg" {
 
-  
-  
+
+
   name        = var.ec2_sg
   description = "AWS security group for ec2 instances"
   vpc_id      = var.vpc_id

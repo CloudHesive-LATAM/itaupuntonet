@@ -11,7 +11,7 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "~> 2.10.0"
     }
-  
+
     random = {
       source  = "hashicorp/random"
       version = "3.1.0"
@@ -29,7 +29,7 @@ terraform {
   }
 
   backend "s3" {
-    
+
   }
 }
 
@@ -49,7 +49,7 @@ terraform {
 
 provider "aws" {
   # Cuenta CICD default
-  region     = var.aws_region["virginia"]
+  region = var.aws_region["virginia"]
 }
 
 # provider "aws" {
@@ -57,7 +57,7 @@ provider "aws" {
 #   alias = "sts_destination_account"
 #   region     = var.aws_region["virginia"]
 #   assume_role {
-    
+
 #     role_arn = var.role_arn_destination_account
 #   }
 
@@ -65,10 +65,10 @@ provider "aws" {
 
 provider "aws" {
   # Cuenta Shared/security 
-  alias = "sts_security_account"
-  region     = var.aws_region["virginia"]
+  alias  = "sts_security_account"
+  region = var.aws_region["virginia"]
   assume_role {
-    
+
     role_arn = var.role_arn_security_account
   }
 

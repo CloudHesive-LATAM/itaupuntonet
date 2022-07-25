@@ -1,7 +1,7 @@
 # Database password - Secret Manager
 
 variable "secret_name" {
-  type = string
+  type    = string
   default = "itaunetsecretsandbox4"
 }
 
@@ -11,7 +11,7 @@ variable "secret_name" {
 variable "allocated_storage" {
   type        = number
   description = "Total Storage"
-  default     = "100" 
+  default     = "100"
 }
 
 variable "vpc_id" {
@@ -27,29 +27,29 @@ variable "cidr_block" {
 variable "engine_version" {
   type        = string
   description = "DB engine version"
-  default     = "14.1" 
+  default     = "14.1"
 }
 
 variable "engine" {
   type        = string
   description = "DB engine"
-  default     = "postgres" 
+  default     = "postgres"
 }
 
 variable "instance_class" {
   type        = string
   description = "Type of RDS Instance"
-  default     = "db.t3.micro" 
+  default     = "db.t3.micro"
 }
 
 variable "name" {
   type        = string
   description = "Name of the database"
-  default     = "itaupuntonet" 
+  default     = "itaupuntonet"
 }
 
 variable "username" {
-  type = string
+  type    = string
   default = "dbadmin"
 }
 

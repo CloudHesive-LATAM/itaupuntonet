@@ -3,7 +3,7 @@
 # EKS Cluster Definition:
 resource "aws_eks_cluster" "eks-cluster" {
 
-  
+
 
   name                      = "${var.eks_master_IAM_policy_parameters["name"]}-${var.eks_environment}-${var.eks_application_definition}"
   role_arn                  = aws_iam_role.eks_master_role.arn
@@ -28,8 +28,8 @@ resource "aws_eks_cluster" "eks-cluster" {
 
 # Node Group 1
 resource "aws_eks_node_group" "eks-ng" {
-  
-  
+
+
 
   cluster_name    = aws_eks_cluster.eks-cluster.name
   node_group_name = var.eks_ng_name

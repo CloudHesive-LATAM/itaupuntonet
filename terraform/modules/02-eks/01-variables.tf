@@ -1,14 +1,14 @@
 ## EKS specific resources
 variable "eks_non_admin_IAM_policy_definition" {
   type = object({
-    name        = string
-    effect      = string
-    actions     = list(string)
-    
+    name    = string
+    effect  = string
+    actions = list(string)
+
     identifiers = list(string)
   })
 
-   default = {
+  default = {
     name        = "EKS-Non-Admin-Policy"
     effect      = "Allow"
     actions     = ["eks:*"]
@@ -18,7 +18,7 @@ variable "eks_non_admin_IAM_policy_definition" {
 }
 
 variable "vpc_cidr_block" {
-  type = string
+  type        = string
   description = "VPC CIDR Block"
 
 }
@@ -30,39 +30,39 @@ variable "app_private_subnets" {
 }
 
 variable "destination_account" {
-    type = string
-    description = "destination account to be used as parameter"
-    default = "308582334619"
+  type        = string
+  description = "destination account to be used as parameter"
+  default     = "308582334619"
 }
 
 variable "cicd_account" {
-    type = string
-    description = "destination account to be used as parameter"
-    default = "793764525616"
+  type        = string
+  description = "destination account to be used as parameter"
+  default     = "793764525616"
 }
 
 variable "cicd_role" {
-    type = string
-    description = "Role to be used to 'jump' to destination account and be able to consume EKS"
-    default = "STSBaseRoleFromCICDEc2RunnerToGeneralCICDPipelines"
+  type        = string
+  description = "Role to be used to 'jump' to destination account and be able to consume EKS"
+  default     = "STSBaseRoleFromCICDEc2RunnerToGeneralCICDPipelines"
 }
 
 variable "eks_non_admin_IAM_STS_policy" {
   default = {
-    name        = "EKS-Non-Admin-STS-policy"
-    effect      = "Allow"
-    actions     = ["sts:AssumeRole"]
-    type        = "AWS"
-    
-    
+    name    = "EKS-Non-Admin-STS-policy"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    type    = "AWS"
+
+
   }
   type = object({
-    name        = string
-    effect      = string
-    actions     = list(string)
-    type        = string
-    
-    
+    name    = string
+    effect  = string
+    actions = list(string)
+    type    = string
+
+
   })
 }
 
@@ -199,13 +199,13 @@ variable "ng_scaling_config" {
 variable "kms_encryption_arn" {
   type        = string
   description = "ARN of ksm key to apply Secret Manager"
-  
+
 }
 
 variable "use_precreated_kms_encryption_key" {
   type        = bool
   description = "Use or not KMS"
-  
+
 }
 
 
@@ -236,17 +236,17 @@ variable "eks_worker_spot" {
   }
 }
 
-  /* EKS Cluster Node EC2 Instance type */
-  #Use: var.instance_type["source"]
-  variable "instance_type" {
-    type = map(string)
-    default = {
-      "dev_env"                = "t3.medium",
-      "qa_env"                 = "t3.small",
-      "prod_mem_optimized_env" = "m5.large",
-      "prod_cpu_optimized_env" = "c5.large",
-    }
+/* EKS Cluster Node EC2 Instance type */
+#Use: var.instance_type["source"]
+variable "instance_type" {
+  type = map(string)
+  default = {
+    "dev_env"                = "t3.medium",
+    "qa_env"                 = "t3.small",
+    "prod_mem_optimized_env" = "m5.large",
+    "prod_cpu_optimized_env" = "c5.large",
   }
+}
 
 ###
 ## FIN de variables para eks
