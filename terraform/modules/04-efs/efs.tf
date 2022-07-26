@@ -1,3 +1,4 @@
+# Create EFS
 resource "aws_efs_file_system" "webapp" {
   creation_token = "my-product"
   encrypted = var.encrypted
